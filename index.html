@@ -78,6 +78,12 @@
             box-shadow: var(--shadow);
         }
 
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
         .stats {
             display: flex;
             gap: 1.5rem;
@@ -203,6 +209,7 @@
             transition: all 0.2s;
             background: var(--primary);
             color: white;
+            font-size: 0.875rem;
         }
 
         .btn:hover {
@@ -219,6 +226,11 @@
             font-size: 0.875rem;
         }
 
+        .btn-xs {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
         .btn-success { background: var(--success); }
         .btn-success:hover { background: var(--success-dark); }
         .btn-warning { background: var(--warning); }
@@ -231,6 +243,10 @@
         .btn-gray:hover { background: var(--gray-dark); }
         .btn-reset-count { background: #f59e0b; }
         .btn-reset-count:hover { background: #d97706; }
+        .btn-import { background: #10b981; }
+        .btn-import:hover { background: #059669; }
+        .btn-export { background: #6366f1; }
+        .btn-export:hover { background: #4f46e5; }
 
         .btn-outline {
             background: transparent;
@@ -246,6 +262,7 @@
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
         }
 
         /* ===== GRID DE CONTEO ===== */
@@ -684,6 +701,50 @@
             opacity: 0.5;
         }
 
+        /* ===== IMPORT MODAL ===== */
+        .import-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .import-method {
+            border: 2px solid #e5e7eb;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .import-method:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+
+        .import-method i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .import-method h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .import-method p {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .import-mode-selector {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: var(--radius-sm);
+        }
+
         /* ===== UTILIDADES ===== */
         .text-success { color: var(--success); }
         .text-warning { color: var(--warning); }
@@ -866,6 +927,19 @@
             max-height: 300px;
             overflow-y: auto;
         }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -878,6 +952,14 @@
                     <h1>Inventario Optimizado</h1>
                     <small>Gestión de unidades y valor</small>
                 </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-sm btn-import" onclick="openImportModal()" title="Importar productos">
+                    <i class="fas fa-file-import"></i> Importar
+                </button>
+                <button class="btn btn-sm btn-export" onclick="exportData()" title="Exportar productos">
+                    <i class="fas fa-file-export"></i> Exportar
+                </button>
             </div>
             <div class="stats">
                 <div class="stat">
@@ -1080,8 +1162,7 @@
                             <i class="fas fa-undo"></i> Limpiar
                         </button>
                         <button class="btn btn-sm btn-reset-count" id="resetCounts">
-                            <i class="fas fa-sync-alt"></i> Reiniciar Conteos
-                        </button>
+                            <i class="fas fa-sync-alt"></i> Reiniciar Conteos                        </button>
                     </div>
                 </div>
             </div>
@@ -1169,6 +1250,60 @@
         </div>
     </div>
 
+    <!-- Modal Importar -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <h2 class="card-title">
+                <i class="fas fa-file-import"></i> Importar Productos
+            </h2>
+            <div class="import-options">
+                <div class="import-method" onclick="document.getElementById('importFile').click()">
+                    <i class="fas fa-file-upload"></i>
+                    <h3>Importar desde archivo JSON</h3>
+                    <p>Carga un archivo .json previamente exportado</p>
+                </div>
+                
+                <div class="import-method" onclick="openTextImport()">
+                    <i class="fas fa-paste"></i>
+                    <h3>Pegar desde portapapeles</h3>
+                    <p>Copia y pega datos JSON directamente</p>
+                </div>
+                
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleFileImport(event)">
+            </div>
+            
+            <div id="importTextArea" style="display: none; margin-top: 1rem;">
+                <textarea id="importJsonText" placeholder="Pega aquí el contenido JSON..." rows="10"></textarea>
+                <button class="btn btn-import mt-2" onclick="handleTextImport()">
+                    <i class="fas fa-check"></i> Importar datos pegados
+                </button>
+            </div>
+            
+            <div class="import-mode-selector" id="importModeSelector" style="display: none;">
+                <h4 style="margin-bottom: 0.5rem;">Modo de importación:</h4>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="importMode" value="replace" checked>
+                        <strong>Reemplazar</strong> - Elimina productos existentes
+                    </label>
+                    <label>
+                        <input type="radio" name="importMode" value="merge">
+                        <strong>Combinar</strong> - Agrega sin eliminar existentes
+                    </label>
+                </div>
+                <button class="btn btn-import mt-2" id="confirmImport" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Confirmar Importación
+                </button>
+            </div>
+            
+            <div id="importPreview" style="margin-top: 1rem;"></div>
+            
+            <div class="flex gap-2 mt-4">
+                <button class="btn btn-outline" onclick="closeAllModals()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="notification"></div>
 
     <script>
@@ -1204,7 +1339,9 @@
                     activeTab: 'units',
                     notificationTimeout: null,
                     searchDebounceTimeout: null
-                }
+                },
+                pendingImport: null,
+                importMode: 'replace'
             };
 
             // ========== INICIALIZACIÓN ==========
@@ -1267,6 +1404,13 @@
 
                 window.addEventListener('click', (e) => {
                     if (e.target.classList.contains('modal')) closeAllModals();
+                });
+
+                // Import mode listeners
+                document.querySelectorAll('input[name="importMode"]').forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        state.importMode = e.target.value;
+                    });
                 });
             }
 
@@ -1371,6 +1515,251 @@
                         renderComparisonSummary();
                         break;
                 }
+            }
+
+            // ========== FUNCIONES DE IMPORTACIÓN/EXPORTACIÓN ==========
+            function openImportModal() {
+                const modal = document.getElementById('importModal');
+                document.getElementById('importFile').value = '';
+                document.getElementById('importTextArea').style.display = 'none';
+                document.getElementById('importModeSelector').style.display = 'none';
+                document.getElementById('confirmImport').style.display = 'none';
+                document.getElementById('importPreview').innerHTML = '';
+                state.pendingImport = null;
+                modal.style.display = 'flex';
+            }
+
+            function openTextImport() {
+                document.getElementById('importTextArea').style.display = 'block';
+                document.getElementById('importModeSelector').style.display = 'block';
+                document.getElementById('confirmImport').style.display = 'inline-flex';
+            }
+
+            function handleFileImport(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                if (!file.name.endsWith('.json')) {
+                    showNotification('Por favor selecciona un archivo .json', 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        processImportData(data);
+                    } catch (err) {
+                        showNotification('El archivo no es un JSON válido', 'error');
+                        console.error('Error parsing JSON:', err);
+                    }
+                };
+                reader.onerror = function() {
+                    showNotification('Error al leer el archivo', 'error');
+                };
+                reader.readAsText(file);
+            }
+
+            function handleTextImport() {
+                const text = document.getElementById('importJsonText').value.trim();
+                if (!text) {
+                    showNotification('Pega el contenido JSON primero', 'warning');
+                    return;
+                }
+
+                try {
+                    const data = JSON.parse(text);
+                    processImportData(data);
+                } catch (err) {
+                    showNotification('El texto no es un JSON válido. Verifica el formato.', 'error');
+                    console.error('Error parsing JSON:', err);
+                }
+            }
+
+            function processImportData(data) {
+                // Validar estructura
+                if (!data || (!data.products && !Array.isArray(data))) {
+                    showNotification('Formato de datos no reconocido', 'error');
+                    return;
+                }
+
+                const products = Array.isArray(data) ? data : (data.products || []);
+                const categories = data.categories || [];
+
+                if (products.length === 0) {
+                    showNotification('No se encontraron productos para importar', 'warning');
+                    return;
+                }
+
+                // Validar productos
+                const validProducts = products.filter(p => p.name && p.price);
+                const invalidCount = products.length - validProducts.length;
+
+                state.pendingImport = {
+                    products: validProducts.map(p => {
+                        // Normalizar estructura del producto
+                        const normalized = {
+                            id: p.id || Date.now() + Math.random(),
+                            name: p.name,
+                            price: parseFloat(p.price) || 0,
+                            category: p.category || '',
+                            needed: parseInt(p.needed) || 0,
+                            neededValue: parseFloat(p.neededValue) || 0,
+                            counts: {
+                                piso: parseInt(p.counts?.piso) || 0,
+                                puertas: parseInt(p.counts?.puertas) || 0,
+                                camara: parseInt(p.counts?.camara) || 0,
+                                bodega: parseInt(p.counts?.bodega) || 0,
+                                merma: parseInt(p.counts?.merma) || 0
+                            },
+                            totalUnits: 0,
+                            totalValue: 0,
+                            unitStatus: 'good',
+                            unitPercentage: 0,
+                            moneyStatus: 'good',
+                            moneyPercentage: 0
+                        };
+                        
+                        // Recalcular métricas
+                        updateProductMetrics(normalized);
+                        return normalized;
+                    }),
+                    categories: categories
+                };
+
+                // Mostrar preview
+                showImportPreview(state.pendingImport, invalidCount);
+                document.getElementById('importModeSelector').style.display = 'block';
+                document.getElementById('confirmImport').style.display = 'inline-flex';
+                
+                // Configurar evento del botón confirmar
+                document.getElementById('confirmImport').onclick = confirmImport;
+            }
+
+            function showImportPreview(importData, invalidCount) {
+                const preview = document.getElementById('importPreview');
+                
+                let html = `<div style="background: var(--light); padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                    <h4 style="margin-bottom: 0.5rem;">Vista previa de importación</h4>
+                    <p><strong>Productos válidos:</strong> ${importData.products.length}</p>`;
+                
+                if (invalidCount > 0) {
+                    html += `<p style="color: var(--warning);"><strong>Productos ignorados:</strong> ${invalidCount} (sin nombre o precio)</p>`;
+                }
+                
+                if (importData.categories.length > 0) {
+                    html += `<p><strong>Categorías incluidas:</strong> ${importData.categories.join(', ')}</p>`;
+                }
+                
+                html += `</div>
+                    <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.5rem;">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Categoría</th>
+                                    <th>Unidades</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${importData.products.map(p => `
+                                    <tr>
+                                        <td>${escapeHtml(p.name)}</td>
+                                        <td>${formatCurrency(p.price)}</td>
+                                        <td>${escapeHtml(p.category) || 'N/A'}</td>
+                                        <td>${p.totalUnits}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                preview.innerHTML = html;
+            }
+
+            function confirmImport() {
+                if (!state.pendingImport || state.pendingImport.products.length === 0) {
+                    showNotification('No hay datos para importar', 'warning');
+                    return;
+                }
+
+                const { products, categories } = state.pendingImport;
+                const mode = document.querySelector('input[name="importMode"]:checked')?.value || 'replace';
+
+                try {
+                    if (mode === 'replace') {
+                        // Reemplazar todos los productos
+                        state.products = products;
+                        if (categories.length > 0) {
+                            state.categories = [...new Set([...categories, ...CONFIG.DEFAULT_CATEGORIES])];
+                        }
+                    } else {
+                        // Modo merge: agregar sin duplicar por ID o nombre
+                        const existingIds = new Set(state.products.map(p => p.id));
+                        
+                        products.forEach(p => {
+                            // Si el ID ya existe, lo reemplaza; si no, lo agrega
+                            const existingIndex = state.products.findIndex(ep => ep.id === p.id);
+                            if (existingIndex >= 0) {
+                                state.products[existingIndex] = p;
+                            } else {
+                                state.products.push(p);
+                            }
+                        });
+                        
+                        if (categories.length > 0) {
+                            const newCategories = categories.filter(c => !state.categories.includes(c));
+                            state.categories = [...state.categories, ...newCategories];
+                        }
+                    }
+
+                    saveData();
+                    updateCategorySelects();
+                    renderCategories();
+                    renderProducts();
+                    updateAllSummaries();
+                    closeAllModals();
+                    
+                    const modeText = mode === 'replace' ? 'reemplazados' : 'combinados';
+                    showNotification(`Importación exitosa: ${products.length} productos ${modeText}`, 'success');
+                    
+                    state.pendingImport = null;
+                } catch (err) {
+                    showNotification('Error al importar los datos', 'error');
+                    console.error('Error importing data:', err);
+                }
+            }
+
+            function exportData() {
+                const data = {
+                    version: CONFIG.VERSION,
+                    exportDate: new Date().toISOString(),
+                    totalProducts: state.products.length,
+                    categories: state.categories,
+                    products: state.products.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        price: p.price,
+                        category: p.category,
+                        needed: p.needed,
+                        neededValue: p.neededValue,
+                        counts: p.counts,
+                        totalUnits: p.totalUnits,
+                        totalValue: p.totalValue
+                    }))
+                };
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `inventario-backup-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                showNotification(`${data.totalProducts} productos exportados correctamente`, 'success');
             }
 
             // ========== FUNCIONES DE CATEGORÍAS ==========
@@ -2172,26 +2561,6 @@
                 showNotification('PDF generado correctamente con colores', 'success');
             }
 
-            // ========== EXPORTAR DATOS ==========
-            function exportData() {
-                const data = {
-                    products: state.products,
-                    categories: state.categories,
-                    exportDate: new Date().toISOString(),
-                    version: CONFIG.VERSION
-                };
-
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `inventario-backup-${new Date().toISOString().split('T')[0]}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-                
-                showNotification('Datos exportados correctamente', 'success');
-            }
-
             // ========== RENDERIZADO ==========
             function renderProducts() {
                 let filtered = filterProducts();
@@ -2701,6 +3070,12 @@
             window.resetMultipleCategories = resetMultipleCategories;
             window.resetAllCounts = resetAllCounts;
             window.saveEditedProduct = saveEditedProduct;
+            window.openImportModal = openImportModal;
+            window.exportData = exportData;
+            window.openTextImport = openTextImport;
+            window.handleFileImport = handleFileImport;
+            window.handleTextImport = handleTextImport;
+            window.confirmImport = confirmImport;
         })();
     </script>
 </body>
