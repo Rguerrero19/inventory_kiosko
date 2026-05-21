@@ -1322,181 +1322,109 @@
                 DEBOUNCE_DELAY: 300,
                 VERSION: '2.0'
             };
-            // ========== CONFIGURACIÓN GOOGLE SHEETS ==========
-const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/TU_URL_AQUI/exec'; // 👈 PEGA TU URL AQUÍ
+// ========== CONFIGURACIÓN GOOGLE SHEETS CORREGIDA ==========
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzx4Viq6qdWPDBogrIdgENpTxvY1Q6v8GRdghBV-oAmVOFZtJMnR2UPeA7SxnOya3ogmg/exec'; // 👈 Pega tu URL aquí
 
-let syncInProgress = false;
-let lastSyncTime = localStorage.getItem('lastSyncTime') || 0;
-
-// Sincronizar datos con Google Sheets
+// Guardar en Google Sheets
 async function syncToGoogleSheets() {
-  if (syncInProgress) {
-    showNotification('Sincronización en curso...', 'info');
-    return;
-  }
-  
-  syncInProgress = true;
-  showNotification('Sincronizando con Google Sheets...', 'info');
-  
   try {
-    const deviceId = localStorage.getItem('device_id') || 'web_' + Math.random().toString(36).substr(2, 9);
-    if (!localStorage.getItem('device_id')) {
-      localStorage.setItem('device_id', deviceId);
-    }
+    showNotification('Sincronizando con Google Sheets...', 'info');
     
-    const response = await fetch(GOOGLE_SHEETS_API, {
+    const response = await fetch(GOOGLE_SHEETS_URL, {
       method: 'POST',
-      mode: 'no-cors', // Importante para Google Apps Script
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        action: 'save',
-        deviceId: deviceId,
         products: state.products,
         categories: state.categories,
+        deviceId: 'web_' + Math.random().toString(36).substr(2, 9),
         timestamp: Date.now()
       })
     });
     
-    // Nota: Con 'no-cors' no podemos leer la respuesta directamente
-    // Pero los datos sí se guardan
+    const result = await response.json();
     
-    localStorage.setItem('lastSyncTime', Date.now().toString());
-    showNotification('✅ Datos sincronizados con Google Sheets', 'success');
-    
-    // Opcional: recargar datos después de guardar
-    setTimeout(() => loadFromGoogleSheets(), 1000);
+    if (result.success) {
+      showNotification(`✅ Sincronizado: ${result.productsCount} productos`, 'success');
+    } else {
+      throw new Error(result.error || 'Error desconocido');
+    }
     
   } catch (error) {
-    console.error('Error al sincronizar:', error);
-    showNotification('❌ Error al sincronizar: ' + error.message, 'error');
-  } finally {
-    syncInProgress = false;
+    console.error('Error:', error);
+    showNotification('❌ Error: ' + error.message, 'error');
   }
 }
 
-// Cargar datos desde Google Sheets
+// Cargar desde Google Sheets
 async function loadFromGoogleSheets() {
-  showNotification('Cargando datos desde la nube...', 'info');
-  
   try {
-    // Para GET, necesitamos un enfoque diferente debido a CORS
-    // Usamos JSONP o un proxy, pero Google Apps Script maneja CORS
+    showNotification('Cargando datos desde la nube...', 'info');
     
-    const response = await fetch(GOOGLE_SHEETS_API + '?t=' + Date.now(), {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    
+    const response = await fetch(GOOGLE_SHEETS_URL + '?t=' + Date.now());
     const data = await response.json();
     
     if (data.success && data.products && data.products.length > 0) {
-      // Verificar si los datos son más recientes que los locales
-      const localProducts = state.products.length;
-      const cloudProducts = data.products.length;
+      state.products = data.products;
       
-      if (cloudProducts > 0) {
-        state.products = data.products;
-        if (data.categories && data.categories.length > 0) {
-          state.categories = data.categories;
-        }
-        
-        // Recalcular métricas de productos
-        state.products.forEach(product => {
-          updateProductMetrics(product);
-        });
-        
-        saveData(); // Guardar localmente
-        renderProducts();
-        updateAllSummaries();
-        
-        showNotification(`📥 Cargados ${cloudProducts} productos desde la nube`, 'success');
-      } else if (localProducts > 0) {
-        showNotification('Los datos locales están más actualizados', 'info');
+      if (data.categories && data.categories.length > 0) {
+        state.categories = data.categories;
       }
+      
+      // Recalcular métricas
+      state.products.forEach(product => {
+        if (product.price && product.counts) {
+          product.totalUnits = Object.values(product.counts).reduce((a, b) => a + b, 0);
+          product.totalValue = product.price * product.totalUnits;
+          product.neededValue = product.price * (product.needed || 0);
+        }
+      });
+      
+      saveData();
+      renderProducts();
+      updateAllSummaries();
+      
+      showNotification(`📥 Cargados ${data.products.length} productos`, 'success');
     } else if (data.products && data.products.length === 0) {
-      showNotification('No hay datos en la nube aún', 'info');
+      showNotification('No hay datos guardados aún', 'info');
     } else {
-      showNotification('No se pudieron cargar datos de la nube', 'warning');
+      showNotification('⚠️ ' + (data.error || 'Error al cargar'), 'warning');
     }
     
   } catch (error) {
-    console.error('Error al cargar:', error);
-    showNotification('⚠️ Error al cargar desde la nube: ' + error.message, 'warning');
+    console.error('Error:', error);
+    showNotification('❌ Error al cargar: ' + error.message, 'error');
   }
 }
 
-// Sincronización automática cada 30 segundos
-let autoSyncInterval;
-
-function startAutoSync() {
-  if (autoSyncInterval) clearInterval(autoSyncInterval);
-  autoSyncInterval = setInterval(() => {
-    // Solo sincronizar si hay cambios (podrías agregar un dirty flag)
-    if (state.products.length > 0) {
-      syncToGoogleSheets();
-    }
-  }, 30000); // Cada 30 segundos
-}
-
-// Modificar saveData original para sincronizar automáticamente
-const originalSaveData = window.saveData || function() {
-  localStorage.setItem(CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(state.products));
-  localStorage.setItem(CONFIG.STORAGE_KEYS.CATEGORIES, JSON.stringify(state.categories));
-};
-
-// Sobrescribir saveData
-window.saveData = function() {
-  originalSaveData();
-  // Sincronizar después de guardar localmente (con debounce)
-  if (window.syncTimeout) clearTimeout(window.syncTimeout);
-  window.syncTimeout = setTimeout(() => {
-    syncToGoogleSheets();
-  }, 2000);
-};
-
-// Agregar botón de sincronización manual al header
-function addSyncButton() {
+// Agregar botones al header
+function addGoogleSheetsButtons() {
   const headerActions = document.querySelector('.header-actions');
   if (headerActions && !document.getElementById('googleSyncBtn')) {
-    const syncBtn = document.createElement('button');
-    syncBtn.id = 'googleSyncBtn';
-    syncBtn.className = 'btn btn-sm btn-success';
-    syncBtn.innerHTML = '<i class="fab fa-google"></i> Sincronizar';
-    syncBtn.title = 'Sincronizar con Google Sheets';
-    syncBtn.onclick = async () => {
-      await syncToGoogleSheets();
-      await loadFromGoogleSheets();
-    };
-    headerActions.appendChild(syncBtn);
+    const btnGroup = document.createElement('div');
+    btnGroup.className = 'flex gap-2';
+    btnGroup.innerHTML = `
+      <button id="googleSyncBtn" class="btn btn-sm btn-success" title="Guardar en Google Sheets">
+        <i class="fab fa-google"></i> Guardar
+      </button>
+      <button id="googleLoadBtn" class="btn btn-sm btn-outline" title="Cargar desde Google Sheets">
+        <i class="fas fa-download"></i> Cargar
+      </button>
+    `;
+    headerActions.appendChild(btnGroup);
     
-    // También agregar botón de solo cargar
-    const loadBtn = document.createElement('button');
-    loadBtn.id = 'googleLoadBtn';
-    loadBtn.className = 'btn btn-sm btn-outline';
-    loadBtn.innerHTML = '<i class="fas fa-download"></i> Cargar';
-    loadBtn.title = 'Cargar desde Google Sheets';
-    loadBtn.onclick = () => loadFromGoogleSheets();
-    headerActions.appendChild(loadBtn);
+    document.getElementById('googleSyncBtn').onclick = syncToGoogleSheets;
+    document.getElementById('googleLoadBtn').onclick = loadFromGoogleSheets;
   }
 }
 
-// Iniciar sincronización automática al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    addSyncButton();
-    startAutoSync();
-    // Cargar datos de la nube al inicio
-    setTimeout(() => loadFromGoogleSheets(), 2000);
-  }, 1000);
-});
+// Inicializar botones cuando cargue la página
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', addGoogleSheetsButtons);
+} else {
+  addGoogleSheetsButtons();
+}
             // ========== ESTADO GLOBAL ==========
             let state = {
                 products: [],
