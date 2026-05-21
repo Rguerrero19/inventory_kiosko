@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Control de Inventario Optimizado</title>
+    <title>Sistema Control de Inventario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -1322,109 +1322,7 @@
                 DEBOUNCE_DELAY: 300,
                 VERSION: '2.0'
             };
-// ========== CONFIGURACIÓN GOOGLE SHEETS CORREGIDA ==========
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzx4Viq6qdWPDBogrIdgENpTxvY1Q6v8GRdghBV-oAmVOFZtJMnR2UPeA7SxnOya3ogmg/exec'; // 👈 Pega tu URL aquí
 
-// Guardar en Google Sheets
-async function syncToGoogleSheets() {
-  try {
-    showNotification('Sincronizando con Google Sheets...', 'info');
-    
-    const response = await fetch(GOOGLE_SHEETS_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        products: state.products,
-        categories: state.categories,
-        deviceId: 'web_' + Math.random().toString(36).substr(2, 9),
-        timestamp: Date.now()
-      })
-    });
-    
-    const result = await response.json();
-    
-    if (result.success) {
-      showNotification(`✅ Sincronizado: ${result.productsCount} productos`, 'success');
-    } else {
-      throw new Error(result.error || 'Error desconocido');
-    }
-    
-  } catch (error) {
-    console.error('Error:', error);
-    showNotification('❌ Error: ' + error.message, 'error');
-  }
-}
-
-// Cargar desde Google Sheets
-async function loadFromGoogleSheets() {
-  try {
-    showNotification('Cargando datos desde la nube...', 'info');
-    
-    const response = await fetch(GOOGLE_SHEETS_URL + '?t=' + Date.now());
-    const data = await response.json();
-    
-    if (data.success && data.products && data.products.length > 0) {
-      state.products = data.products;
-      
-      if (data.categories && data.categories.length > 0) {
-        state.categories = data.categories;
-      }
-      
-      // Recalcular métricas
-      state.products.forEach(product => {
-        if (product.price && product.counts) {
-          product.totalUnits = Object.values(product.counts).reduce((a, b) => a + b, 0);
-          product.totalValue = product.price * product.totalUnits;
-          product.neededValue = product.price * (product.needed || 0);
-        }
-      });
-      
-      saveData();
-      renderProducts();
-      updateAllSummaries();
-      
-      showNotification(`📥 Cargados ${data.products.length} productos`, 'success');
-    } else if (data.products && data.products.length === 0) {
-      showNotification('No hay datos guardados aún', 'info');
-    } else {
-      showNotification('⚠️ ' + (data.error || 'Error al cargar'), 'warning');
-    }
-    
-  } catch (error) {
-    console.error('Error:', error);
-    showNotification('❌ Error al cargar: ' + error.message, 'error');
-  }
-}
-
-// Agregar botones al header
-function addGoogleSheetsButtons() {
-  const headerActions = document.querySelector('.header-actions');
-  if (headerActions && !document.getElementById('googleSyncBtn')) {
-    const btnGroup = document.createElement('div');
-    btnGroup.className = 'flex gap-2';
-    btnGroup.innerHTML = `
-      <button id="googleSyncBtn" class="btn btn-sm btn-success" title="Guardar en Google Sheets">
-        <i class="fab fa-google"></i> Guardar
-      </button>
-      <button id="googleLoadBtn" class="btn btn-sm btn-outline" title="Cargar desde Google Sheets">
-        <i class="fas fa-download"></i> Cargar
-      </button>
-    `;
-    headerActions.appendChild(btnGroup);
-    
-    document.getElementById('googleSyncBtn').onclick = syncToGoogleSheets;
-    document.getElementById('googleLoadBtn').onclick = loadFromGoogleSheets;
-  }
-}
-
-// Inicializar botones cuando cargue la página
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', addGoogleSheetsButtons);
-} else {
-  addGoogleSheetsButtons();
-}
             // ========== ESTADO GLOBAL ==========
             let state = {
                 products: [],
