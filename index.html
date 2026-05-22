@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Sistema Control de Inventario - Multi Usuario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <style>
-        /* ===== RESET Y VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -48,7 +45,6 @@
             margin: 0 auto;
         }
 
-        /* ===== HEADER ===== */
         .header {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             color: white;
@@ -107,7 +103,6 @@
             font-weight: bold;
         }
 
-        /* ===== LAYOUT ===== */
         .grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -120,7 +115,6 @@
             }
         }
 
-        /* ===== CARDS ===== */
         .card {
             background: var(--white);
             border-radius: var(--radius);
@@ -145,7 +139,6 @@
             color: #1e293b;
         }
 
-        /* ===== FORMS ===== */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -195,7 +188,6 @@
             padding-left: 1rem;
         }
 
-        /* ===== BOTONES GRANDES PARA MÓVIL ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -208,7 +200,7 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 1rem;
-            min-height: 44px; /* Tamaño mínimo para touch */
+            min-height: 44px;
         }
 
         .btn:active {
@@ -221,23 +213,17 @@
             min-height: 40px;
         }
 
-        .btn-xs {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-        }
-
-        .btn-success { background: var(--success); }
+        .btn-success { background: var(--success); color: white; }
         .btn-success:hover { background: var(--success-dark); }
-        .btn-warning { background: var(--warning); }
+        .btn-warning { background: var(--warning); color: white; }
         .btn-warning:hover { background: var(--warning-dark); }
-        .btn-danger { background: var(--danger); }
+        .btn-danger { background: var(--danger); color: white; }
         .btn-danger:hover { background: var(--danger-dark); }
-        .btn-money { background: var(--money); }
+        .btn-money { background: var(--money); color: white; }
         .btn-money:hover { background: var(--money-dark); }
-        .btn-gray { background: var(--gray); }
+        .btn-gray { background: var(--gray); color: white; }
         .btn-gray:hover { background: var(--gray-dark); }
         
-        /* Botones de sincronización destacados */
         .btn-sync {
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
@@ -274,7 +260,6 @@
             transform: none;
         }
 
-        /* ===== GRID DE CONTEO ===== */
         .count-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -303,7 +288,6 @@
             font-size: 0.875rem;
         }
 
-        /* ===== CATEGORÍAS ===== */
         .categories {
             display: flex;
             flex-wrap: wrap;
@@ -323,10 +307,6 @@
             border-radius: 2rem;
             font-size: 0.875rem;
             transition: all 0.2s;
-        }
-
-        .category:active {
-            background: #d1d5db;
         }
 
         .category-actions {
@@ -352,54 +332,19 @@
             transform: scale(0.95);
         }
 
-        .category-action.share {
-            color: var(--primary);
-        }
+        .category-action.share { color: var(--primary); }
+        .category-action.reset { color: #f59e0b; }
+        .category-action.delete { color: var(--danger); }
 
-        .category-action.share:active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .category-action.reset {
-            color: #f59e0b;
-        }
-
-        .category-action.reset:active {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .category-action.delete {
-            color: var(--danger);
-        }
-
-        .category-action.delete:active {
-            background: var(--danger);
-            color: white;
-        }
-
-        /* ===== LISTA DE PRODUCTOS ===== */
         .product-list {
             max-height: 600px;
             overflow-y: auto;
             padding: 0.5rem;
             scrollbar-width: thin;
-            scrollbar-color: var(--gray) var(--light);
         }
 
         .product-list::-webkit-scrollbar {
             width: 8px;
-        }
-
-        .product-list::-webkit-scrollbar-track {
-            background: var(--light);
-            border-radius: 4px;
-        }
-
-        .product-list::-webkit-scrollbar-thumb {
-            background: var(--gray);
-            border-radius: 4px;
         }
 
         .product-item {
@@ -409,10 +354,6 @@
             padding: 1rem;
             margin-bottom: 1rem;
             transition: all 0.2s;
-        }
-
-        .product-item:active {
-            border-color: var(--primary);
         }
 
         .product-header {
@@ -434,7 +375,6 @@
             border-radius: 1rem;
         }
 
-        /* ===== BARRAS DE PROGRESO ===== */
         .progress-section {
             margin: 0.75rem 0;
         }
@@ -461,9 +401,7 @@
         .progress-good { background: var(--success); }
         .progress-warning { background: var(--warning); }
         .progress-danger { background: var(--danger); }
-        .progress-money { background: var(--money); }
 
-        /* ===== FILTROS ===== */
         .filter-group {
             display: flex;
             flex-wrap: wrap;
@@ -484,17 +422,11 @@
             min-height: 44px;
         }
 
-        .filter-btn:active {
-            background: #e5e7eb;
-            transform: scale(0.98);
-        }
-
         .filter-btn.active {
             background: var(--primary);
             color: white;
         }
 
-        /* ===== NOTIFICACIONES ===== */
         .notification {
             position: fixed;
             top: 1rem;
@@ -523,7 +455,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -551,15 +482,8 @@
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            animation: slideUp 0.3s;
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* ===== COMPARACIÓN DE DINERO ===== */
         .comparison-container {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -569,15 +493,10 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* ===== OTROS ESTILOS ===== */
         .search-box {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1rem;
-        }
-
-        .search-box input {
-            flex: 1;
         }
 
         .summary-grid {
@@ -621,9 +540,6 @@
         .justify-between { justify-content: space-between; }
         .w-full { width: 100%; }
         .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .font-bold { font-weight: bold; }
-        .overflow-x-auto { overflow-x: auto; }
 
         @media (max-width: 640px) {
             .header {
@@ -649,6 +565,37 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        .reset-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .reset-option {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-option:hover {
+            border-color: var(--primary);
+            background: #f0f9ff;
+        }
+
+        .reset-option h3 {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reset-option p {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
     </style>
 </head>
 <body>
@@ -662,14 +609,17 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button class="btn btn-sync" id="syncToCloudBtn" onclick="syncToGoogleSheets()">
+                <button class="btn btn-sync" onclick="syncToCloud()">
                     <i class="fas fa-cloud-upload-alt"></i> Guardar en Cloud
                 </button>
-                <button class="btn btn-load" id="loadFromCloudBtn" onclick="loadFromGoogleSheets()">
+                <button class="btn btn-load" onclick="loadFromCloud()">
                     <i class="fas fa-cloud-download-alt"></i> Cargar desde Cloud
                 </button>
                 <button class="btn btn-sm btn-outline" onclick="exportData()">
                     <i class="fas fa-file-export"></i> Exportar
+                </button>
+                <button class="btn btn-sm btn-warning" onclick="showResetModal()">
+                    <i class="fas fa-sync-alt"></i> Reiniciar
                 </button>
             </div>
             <div class="stats">
@@ -688,35 +638,29 @@
             </div>
         </header>
 
-        <div class="comparison-container" id="moneyComparison">
-            <div class="comparison-title">
-                <i class="fas fa-chart-line"></i>
-                <span>Comparación de Valor Monetario</span>
-            </div>
-            <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
-                <div class="comparison-item" style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 0.5rem;">
-                    <div class="comparison-label">Valor Real</div>
+        <div class="comparison-container">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 0.5rem;">
+                    <div>Valor Real</div>
                     <div class="comparison-value" id="comparisonReal" style="font-size: 1.5rem; font-weight: bold;">$0</div>
                 </div>
-                <div class="comparison-item" style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 0.5rem;">
-                    <div class="comparison-label">Valor Necesario</div>
+                <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 0.5rem;">
+                    <div>Valor Necesario</div>
                     <div class="comparison-value" id="comparisonNeeded" style="font-size: 1.5rem; font-weight: bold;">$0</div>
                 </div>
             </div>
-            <div class="comparison-difference" id="comparisonDifference" style="text-align: center; padding: 1rem;">
-                <div class="difference-value" id="differenceAmount" style="font-size: 1.25rem; font-weight: bold;">$0</div>
+            <div style="text-align: center; padding: 1rem;">
+                <div id="differenceAmount" style="font-size: 1.25rem; font-weight: bold;">$0</div>
             </div>
         </div>
 
         <div class="grid">
             <div>
                 <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-tags"></i> Categorías
-                    </h2>
+                    <h2 class="card-title"><i class="fas fa-tags"></i> Categorías</h2>
                     <div class="flex gap-2 mb-2">
-                        <input type="text" id="newCategory" placeholder="Nueva categoría" class="input-number" maxlength="50">
-                        <button class="btn btn-sm btn-success" id="addCategory">
+                        <input type="text" id="newCategory" placeholder="Nueva categoría" style="padding-left: 1rem;">
+                        <button class="btn btn-sm btn-success" onclick="addNewCategory()">
                             <i class="fas fa-plus"></i> Agregar
                         </button>
                     </div>
@@ -724,10 +668,8 @@
                 </div>
 
                 <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-plus-circle"></i> Nuevo Producto
-                    </h2>
-                    <form id="productForm">
+                    <h2 class="card-title"><i class="fas fa-plus-circle"></i> Nuevo Producto</h2>
+                    <form id="productForm" onsubmit="saveProduct(event)">
                         <div class="form-group">
                             <label>Nombre</label>
                             <div class="input-group">
@@ -755,17 +697,17 @@
                             <label>Cantidad Necesaria</label>
                             <div class="input-group">
                                 <i class="fas fa-flag"></i>
-                                <input type="number" id="productNeeded" min="0" value="0" class="input-number">
+                                <input type="number" id="productNeeded" min="0" value="0" style="padding-left: 1rem;">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Conteo por Ubicación</label>
                             <div class="count-grid">
-                                <div class="count-item"><label>Piso Venta</label><input type="number" id="countPiso" value="0" min="0" class="input-number"></div>
-                                <div class="count-item"><label>Puertas</label><input type="number" id="countPuertas" value="0" min="0" class="input-number"></div>
-                                <div class="count-item"><label>Cámara</label><input type="number" id="countCamara" value="0" min="0" class="input-number"></div>
-                                <div class="count-item"><label>Bodega</label><input type="number" id="countBodega" value="0" min="0" class="input-number"></div>
-                                <div class="count-item"><label>Merma</label><input type="number" id="countMerma" value="0" min="0" class="input-number"></div>
+                                <div class="count-item"><label>Piso Venta</label><input type="number" id="countPiso" value="0" min="0" style="padding-left: 0.5rem;"></div>
+                                <div class="count-item"><label>Puertas</label><input type="number" id="countPuertas" value="0" min="0" style="padding-left: 0.5rem;"></div>
+                                <div class="count-item"><label>Cámara</label><input type="number" id="countCamara" value="0" min="0" style="padding-left: 0.5rem;"></div>
+                                <div class="count-item"><label>Bodega</label><input type="number" id="countBodega" value="0" min="0" style="padding-left: 0.5rem;"></div>
+                                <div class="count-item"><label>Merma</label><input type="number" id="countMerma" value="0" min="0" style="padding-left: 0.5rem;"></div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success w-full mt-2">
@@ -775,34 +717,32 @@
                 </div>
 
                 <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-filter"></i> Filtros
-                    </h2>
+                    <h2 class="card-title"><i class="fas fa-filter"></i> Filtros</h2>
                     <div class="form-group">
                         <label>Categoría</label>
-                        <select id="filterCategory" class="input-number">
+                        <select id="filterCategory" style="padding-left: 1rem;">
                             <option value="">Todas</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Estado</label>
                         <div class="filter-group">
-                            <button class="filter-btn active" data-filter="all">Todos</button>
-                            <button class="filter-btn" data-filter="good">Suficiente</button>
-                            <button class="filter-btn" data-filter="warning">Bajo</button>
-                            <button class="filter-btn" data-filter="danger">Faltante</button>
+                            <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">Todos</button>
+                            <button class="filter-btn" data-filter="good" onclick="setFilter('good', this)">Suficiente</button>
+                            <button class="filter-btn" data-filter="warning" onclick="setFilter('warning', this)">Bajo</button>
+                            <button class="filter-btn" data-filter="danger" onclick="setFilter('danger', this)">Faltante</button>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Ordenar por</label>
-                        <select id="sortBy" class="input-number">
+                        <select id="sortBy" style="padding-left: 1rem;" onchange="renderProducts()">
                             <option value="name">Nombre A-Z</option>
                             <option value="nameDesc">Nombre Z-A</option>
                             <option value="unitsBest">Unidades (mejor)</option>
                             <option value="unitsWorst">Unidades (peor)</option>
                         </select>
                     </div>
-                    <button class="btn btn-sm btn-outline w-full" id="clearFilters">
+                    <button class="btn btn-sm btn-outline w-full" onclick="clearFilters()">
                         <i class="fas fa-undo"></i> Limpiar Filtros
                     </button>
                 </div>
@@ -811,16 +751,14 @@
             <div>
                 <div class="card">
                     <div class="flex justify-between items-center mb-2">
-                        <h2 class="card-title" style="margin-bottom: 0;">
-                            <i class="fas fa-box-open"></i> Productos
-                        </h2>
-                        <button class="btn btn-sm btn-outline" id="toggleView">
+                        <h2 class="card-title" style="margin-bottom: 0;"><i class="fas fa-box-open"></i> Productos</h2>
+                        <button class="btn btn-sm btn-outline" onclick="toggleView()">
                             <i class="fas fa-list"></i> Compacta
                         </button>
                     </div>
                     <div class="search-box">
-                        <input type="text" id="search" placeholder="Buscar producto..." class="input-number">
-                        <button class="btn btn-sm btn-gray" id="clearSearch">
+                        <input type="text" id="search" placeholder="Buscar producto..." style="padding-left: 1rem;" oninput="renderProducts()">
+                        <button class="btn btn-sm btn-gray" onclick="clearSearch()">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
@@ -828,147 +766,178 @@
                 </div>
 
                 <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-chart-pie"></i> Resumen
-                    </h2>
+                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> Resumen</h2>
                     <div id="summaryUnits"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modales -->
-    <div class="modal" id="editModal"><div class="modal-content"><h2 class="card-title"><i class="fas fa-edit"></i> Editar Producto</h2><div id="editForm"></div></div></div>
-    <div class="modal" id="shareModal"><div class="modal-content"><h2 class="card-title"><i class="fas fa-share-alt"></i> Compartir Reporte</h2><div id="shareContent"></div></div></div>
+    <!-- Modal de Reinicio -->
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <h2 class="card-title"><i class="fas fa-sync-alt"></i> Reiniciar Conteos y Necesidades</h2>
+            <div class="reset-options">
+                <div class="reset-option" onclick="resetCounts()">
+                    <h3><i class="fas fa-calculator"></i> Reiniciar solo conteos</h3>
+                    <p>Establece todos los conteos de productos a 0. Mantiene nombres, precios, categorías y necesidades.</p>
+                    <small class="text-warning">⚠️ Los valores de inventario se perderán</small>
+                </div>
+                <div class="reset-option" onclick="resetNeeds()">
+                    <h3><i class="fas fa-flag-checkered"></i> Reiniciar solo necesidades</h3>
+                    <p>Establece todas las cantidades necesarias a 0. Mantiene inventario actual.</p>
+                    <small class="text-warning">⚠️ Se perderán los objetivos de stock</small>
+                </div>
+                <div class="reset-option" onclick="resetAll()">
+                    <h3><i class="fas fa-trash-alt"></i> Reiniciar todo (conteos y necesidades)</h3>
+                    <p>Reinicia tanto los conteos como las necesidades a 0.</p>
+                    <small class="text-danger">⚠️ Acción irreversible</small>
+                </div>
+                <button class="btn btn-outline w-full mt-2" onclick="closeResetModal()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="notification"></div>
 
     <script>
-        // ========== CONFIGURACIÓN ==========
-        // ⚠️ IMPORTANTE: Reemplaza esta URL con la de tu Google Apps Script
-        const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbwCRu_e1pb7Cho_H1Ac26rAq5R9DwBrbRuWr4hy3gramj6aJzGOGUXX4HP5DaW93Y5XHA/exec';
-        
         let state = {
             products: [],
             categories: ['Electrónica', 'Ropa', 'Alimentos', 'Hogar'],
             filters: { search: '', category: '', unitStatus: 'all', sort: 'name' },
-            ui: { compactView: false }
+            compactView: false
         };
 
-        // ========== SINCRONIZACIÓN MANUAL CON GOOGLE SHEETS ==========
-        async function syncToGoogleSheets() {
-            const btn = document.getElementById('syncToCloudBtn');
-            const originalText = btn.innerHTML;
+        // ========== FUNCIONES DE REINICIO ==========
+        function showResetModal() {
+            document.getElementById('resetModal').style.display = 'flex';
+        }
+
+        function closeResetModal() {
+            document.getElementById('resetModal').style.display = 'none';
+        }
+
+        function resetCounts() {
+            if (!confirm('¿Estás seguro de reiniciar TODOS los conteos a 0? Esta acción no se puede deshacer.')) {
+                return;
+            }
             
-            try {
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-                btn.disabled = true;
+            state.products.forEach(product => {
+                product.counts = {
+                    piso: 0,
+                    puertas: 0,
+                    camara: 0,
+                    bodega: 0,
+                    merma: 0
+                };
+                product.totalUnits = 0;
+                product.totalValue = 0;
+                product.neededValue = product.price * product.needed;
+                product.unitStatus = getStatus(0, product.needed);
+                product.unitPercentage = product.needed > 0 ? 0 : 0;
+            });
+            
+            saveData();
+            renderProducts();
+            updateAllSummaries();
+            closeResetModal();
+            showNotification('✅ Todos los conteos han sido reiniciados a 0', 'success');
+        }
+
+        function resetNeeds() {
+            if (!confirm('¿Estás seguro de reiniciar TODAS las necesidades a 0? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            state.products.forEach(product => {
+                product.needed = 0;
+                product.neededValue = 0;
+                product.unitStatus = getStatus(product.totalUnits, 0);
+                product.unitPercentage = 0;
+            });
+            
+            saveData();
+            renderProducts();
+            updateAllSummaries();
+            closeResetModal();
+            showNotification('✅ Todas las necesidades han sido reiniciadas a 0', 'success');
+        }
+
+        function resetAll() {
+            if (!confirm('⚠️ ACCIÓN IRREVERSIBLE: ¿Estás seguro de reiniciar TODOS los conteos Y necesidades a 0? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            state.products.forEach(product => {
+                product.counts = {
+                    piso: 0,
+                    puertas: 0,
+                    camara: 0,
+                    bodega: 0,
+                    merma: 0
+                };
+                product.totalUnits = 0;
+                product.totalValue = 0;
+                product.needed = 0;
+                product.neededValue = 0;
+                product.unitStatus = 'none';
+                product.unitPercentage = 0;
+            });
+            
+            saveData();
+            renderProducts();
+            updateAllSummaries();
+            closeResetModal();
+            showNotification('✅ Todos los conteos y necesidades han sido reiniciados a 0', 'success');
+        }
+
+        function resetSingleProductCounts(productId) {
+            if (!confirm('¿Reiniciar conteos de este producto a 0?')) return;
+            
+            const product = state.products.find(p => p.id === productId);
+            if (product) {
+                product.counts = {
+                    piso: 0,
+                    puertas: 0,
+                    camara: 0,
+                    bodega: 0,
+                    merma: 0
+                };
+                product.totalUnits = 0;
+                product.totalValue = 0;
+                product.neededValue = product.price * product.needed;
+                product.unitStatus = getStatus(0, product.needed);
+                product.unitPercentage = product.needed > 0 ? 0 : 0;
                 
-                const deviceId = localStorage.getItem('device_id') || 'user_' + Math.random().toString(36).substr(2, 9);
-                if (!localStorage.getItem('device_id')) localStorage.setItem('device_id', deviceId);
-                
-                const response = await fetch(GOOGLE_SHEETS_API, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'save',
-                        deviceId: deviceId,
-                        products: state.products,
-                        categories: state.categories,
-                        timestamp: Date.now(),
-                        version: '2.0'
-                    })
-                });
-                
-                showNotification('✅ Datos guardados en la nube exitosamente', 'success');
-                localStorage.setItem('lastSyncTime', Date.now().toString());
-                
-            } catch (error) {
-                console.error('Error al guardar:', error);
-                showNotification('❌ Error al guardar: ' + error.message, 'error');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                saveData();
+                renderProducts();
+                updateAllSummaries();
+                showNotification(`✅ Conteos de "${product.name}" reiniciados`, 'success');
             }
         }
 
-        async function loadFromGoogleSheets() {
-            const btn = document.getElementById('loadFromCloudBtn');
-            const originalText = btn.innerHTML;
+        function resetSingleProductNeeds(productId) {
+            if (!confirm('¿Reiniciar necesidad de este producto a 0?')) return;
             
-            try {
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
-                btn.disabled = true;
+            const product = state.products.find(p => p.id === productId);
+            if (product) {
+                product.needed = 0;
+                product.neededValue = 0;
+                product.unitStatus = getStatus(product.totalUnits, 0);
+                product.unitPercentage = 0;
                 
-                const response = await fetch(GOOGLE_SHEETS_API + '?t=' + Date.now(), {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
-                });
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                const data = await response.json();
-                
-                if (data.success && data.products && data.products.length > 0) {
-                    if (confirm(`Se encontraron ${data.products.length} productos en la nube. ¿Deseas cargarlos? (Esto reemplazará los datos locales)`)) {
-                        state.products = data.products;
-                        if (data.categories && data.categories.length > 0) {
-                            state.categories = data.categories;
-                        }
-                        saveData();
-                        renderProducts();
-                        updateAllSummaries();
-                        updateCategorySelects();
-                        renderCategories();
-                        showNotification(`📥 Cargados ${data.products.length} productos desde la nube`, 'success');
-                    }
-                } else if (data.products && data.products.length === 0) {
-                    showNotification('No hay datos guardados en la nube aún', 'info');
-                } else {
-                    showNotification('No se pudieron cargar datos de la nube', 'warning');
-                }
-                
-            } catch (error) {
-                console.error('Error al cargar:', error);
-                showNotification('⚠️ Error al cargar: ' + error.message, 'warning');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                saveData();
+                renderProducts();
+                updateAllSummaries();
+                showNotification(`✅ Necesidad de "${product.name}" reiniciada`, 'success');
             }
         }
 
         // ========== FUNCIONES PRINCIPALES ==========
-        function initialize() {
-            loadData();
-            updateCategorySelects();
-            renderCategories();
-            renderProducts();
-            updateAllSummaries();
-            setupEventListeners();
-        }
-
-        function setupEventListeners() {
-            document.getElementById('productForm').addEventListener('submit', saveProduct);
-            document.getElementById('addCategory').addEventListener('click', addNewCategory);
-            document.getElementById('search').addEventListener('input', (e) => { state.filters.search = e.target.value.toLowerCase(); renderProducts(); });
-            document.getElementById('clearSearch').addEventListener('click', () => { document.getElementById('search').value = ''; state.filters.search = ''; renderProducts(); });
-            document.getElementById('filterCategory').addEventListener('change', (e) => { state.filters.category = e.target.value; renderProducts(); });
-            document.getElementById('sortBy').addEventListener('change', (e) => { state.filters.sort = e.target.value; renderProducts(); });
-            document.getElementById('clearFilters').addEventListener('click', () => { state.filters = { search: '', category: '', unitStatus: 'all', sort: 'name' }; document.getElementById('filterCategory').value = ''; document.getElementById('search').value = ''; renderProducts(); showNotification('Filtros limpiados', 'info'); });
-            document.getElementById('toggleView').addEventListener('click', () => { state.ui.compactView = !state.ui.compactView; renderProducts(); });
-            
-            document.querySelectorAll('[data-filter]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    state.filters.unitStatus = e.target.dataset.filter;
-                    renderProducts();
-                });
-            });
-        }
-
-        function saveProduct(e) {
-            e.preventDefault();
+        function saveProduct(event) {
+            event.preventDefault();
             const name = document.getElementById('productName').value.trim();
             const price = parseFloat(document.getElementById('productPrice').value);
             const category = document.getElementById('productCategory').value;
@@ -1000,7 +969,6 @@
             renderProducts();
             updateAllSummaries();
             document.getElementById('productForm').reset();
-            ['Piso', 'Puertas', 'Camara', 'Bodega', 'Merma'].forEach(loc => document.getElementById(`count${loc}`).value = 0);
             showNotification('Producto guardado', 'success');
         }
 
@@ -1008,51 +976,19 @@
             const p = state.products.find(p => p.id === id);
             if (!p) return;
             
-            const modal = document.getElementById('editModal');
-            document.getElementById('editForm').innerHTML = `
-                <form id="editProductForm" onsubmit="event.preventDefault(); saveEditedProduct(${id})">
-                    <div class="form-group"><label>Nombre</label><input type="text" id="editName" value="${escapeHtml(p.name)}" required></div>
-                    <div class="form-group"><label>Precio</label><input type="number" id="editPrice" value="${p.price}" step="0.01" required></div>
-                    <div class="form-group"><label>Categoría</label><select id="editCategory" required>${state.categories.map(c => `<option ${c === p.category ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('')}</select></div>
-                    <div class="form-group"><label>Necesario</label><input type="number" id="editNeeded" value="${p.needed}"></div>
-                    <div class="count-grid">
-                        <div><label>Piso</label><input type="number" id="editPiso" value="${p.counts.piso}"></div>
-                        <div><label>Puertas</label><input type="number" id="editPuertas" value="${p.counts.puertas}"></div>
-                        <div><label>Cámara</label><input type="number" id="editCamara" value="${p.counts.camara}"></div>
-                        <div><label>Bodega</label><input type="number" id="editBodega" value="${p.counts.bodega}"></div>
-                        <div><label>Merma</label><input type="number" id="editMerma" value="${p.counts.merma}"></div>
-                    </div>
-                    <div class="flex gap-2 mt-4"><button type="submit" class="btn btn-success">Guardar</button><button type="button" class="btn btn-danger" onclick="deleteProduct(${id})">Eliminar</button><button type="button" class="btn btn-outline" onclick="closeAllModals()">Cancelar</button></div>
-                </form>
-            `;
-            modal.style.display = 'flex';
-        }
-
-        function saveEditedProduct(id) {
-            const p = state.products.find(p => p.id === id);
-            if (!p) return;
+            const newName = prompt('Nuevo nombre:', p.name);
+            if (!newName) return;
+            const newPrice = parseFloat(prompt('Nuevo precio:', p.price));
+            if (isNaN(newPrice)) return;
             
-            p.name = document.getElementById('editName').value.trim();
-            p.price = parseFloat(document.getElementById('editPrice').value);
-            p.category = document.getElementById('editCategory').value;
-            p.needed = parseInt(document.getElementById('editNeeded').value) || 0;
-            p.counts = {
-                piso: parseInt(document.getElementById('editPiso').value) || 0,
-                puertas: parseInt(document.getElementById('editPuertas').value) || 0,
-                camara: parseInt(document.getElementById('editCamara').value) || 0,
-                bodega: parseInt(document.getElementById('editBodega').value) || 0,
-                merma: parseInt(document.getElementById('editMerma').value) || 0
-            };
-            p.totalUnits = Object.values(p.counts).reduce((a, b) => a + b, 0);
+            p.name = newName;
+            p.price = newPrice;
             p.totalValue = p.price * p.totalUnits;
             p.neededValue = p.price * p.needed;
-            p.unitStatus = getStatus(p.totalUnits, p.needed);
-            p.unitPercentage = p.needed > 0 ? Math.min(100, Math.round((p.totalUnits / p.needed) * 100)) : 0;
             
             saveData();
             renderProducts();
             updateAllSummaries();
-            closeAllModals();
             showNotification('Producto actualizado', 'success');
         }
 
@@ -1062,7 +998,6 @@
             saveData();
             renderProducts();
             updateAllSummaries();
-            closeAllModals();
             showNotification('Producto eliminado', 'success');
         }
 
@@ -1132,33 +1067,45 @@
                 return;
             }
             
-            document.getElementById('productList').innerHTML = filtered.map(p => state.ui.compactView ? renderCompact(p) : renderFull(p)).join('');
-        }
-
-        function renderCompact(p) {
-            return `<div class="product-item">
-                <div class="product-header"><span class="product-name">${escapeHtml(p.name)}</span><span class="product-category">${escapeHtml(p.category)}</span></div>
-                <div class="progress-header"><span>${formatCurrency(p.price)}</span><span class="text-${p.unitStatus === 'good' ? 'success' : p.unitStatus === 'warning' ? 'warning' : 'danger'}">${p.totalUnits}/${p.needed || 0}</span></div>
-                <button class="btn btn-sm btn-outline w-full mt-2" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i> Editar</button>
-            </div>`;
-        }
-
-        function renderFull(p) {
-            return `<div class="product-item">
-                <div class="product-header"><span class="product-name">${escapeHtml(p.name)}</span><span class="product-category">${escapeHtml(p.category)}</span></div>
-                <div class="count-grid">
-                    <div><label>Piso</label><input type="number" value="${p.counts.piso}" onchange="updateCount(${p.id}, 'piso', this.value)" min="0"></div>
-                    <div><label>Puertas</label><input type="number" value="${p.counts.puertas}" onchange="updateCount(${p.id}, 'puertas', this.value)" min="0"></div>
-                    <div><label>Cámara</label><input type="number" value="${p.counts.camara}" onchange="updateCount(${p.id}, 'camara', this.value)" min="0"></div>
-                    <div><label>Bodega</label><input type="number" value="${p.counts.bodega}" onchange="updateCount(${p.id}, 'bodega', this.value)" min="0"></div>
-                    <div><label>Merma</label><input type="number" value="${p.counts.merma}" onchange="updateCount(${p.id}, 'merma', this.value)" min="0"></div>
-                </div>
-                <div class="progress-section">
-                    <div class="progress-header"><span>Unidades: ${p.totalUnits} / ${p.needed || 'N/A'}</span><span class="text-${p.unitStatus === 'good' ? 'success' : p.unitStatus === 'warning' ? 'warning' : 'danger'}">${p.unitPercentage}%</span></div>
-                    <div class="progress-bar"><div class="progress-fill progress-${p.unitStatus === 'good' ? 'good' : p.unitStatus === 'warning' ? 'warning' : 'danger'}" style="width: ${p.unitPercentage}%"></div></div>
-                </div>
-                <button class="btn btn-sm btn-outline w-full" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i> Editar</button>
-            </div>`;
+            document.getElementById('productList').innerHTML = filtered.map(p => {
+                if (state.compactView) {
+                    return `<div class="product-item">
+                        <div class="product-header"><span class="product-name">${escapeHtml(p.name)}</span><span class="product-category">${escapeHtml(p.category)}</span></div>
+                        <div class="progress-header"><span>${formatCurrency(p.price)}</span><span class="text-${p.unitStatus === 'good' ? 'success' : p.unitStatus === 'warning' ? 'warning' : 'danger'}">${p.totalUnits}/${p.needed || 0}</span></div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn btn-sm btn-outline" style="flex:1" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn btn-sm btn-danger" style="flex:1" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i> Eliminar</button>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn btn-sm btn-warning" style="flex:1" onclick="resetSingleProductCounts(${p.id})"><i class="fas fa-calculator"></i> Reiniciar Conteos</button>
+                            <button class="btn btn-sm btn-warning" style="flex:1" onclick="resetSingleProductNeeds(${p.id})"><i class="fas fa-flag"></i> Reiniciar Necesidad</button>
+                        </div>
+                    </div>`;
+                } else {
+                    return `<div class="product-item">
+                        <div class="product-header"><span class="product-name">${escapeHtml(p.name)}</span><span class="product-category">${escapeHtml(p.category)}</span></div>
+                        <div class="count-grid">
+                            <div><label>Piso</label><input type="number" value="${p.counts.piso}" onchange="updateCount(${p.id}, 'piso', this.value)" min="0" style="padding-left:0.5rem"></div>
+                            <div><label>Puertas</label><input type="number" value="${p.counts.puertas}" onchange="updateCount(${p.id}, 'puertas', this.value)" min="0" style="padding-left:0.5rem"></div>
+                            <div><label>Cámara</label><input type="number" value="${p.counts.camara}" onchange="updateCount(${p.id}, 'camara', this.value)" min="0" style="padding-left:0.5rem"></div>
+                            <div><label>Bodega</label><input type="number" value="${p.counts.bodega}" onchange="updateCount(${p.id}, 'bodega', this.value)" min="0" style="padding-left:0.5rem"></div>
+                            <div><label>Merma</label><input type="number" value="${p.counts.merma}" onchange="updateCount(${p.id}, 'merma', this.value)" min="0" style="padding-left:0.5rem"></div>
+                        </div>
+                        <div class="progress-section">
+                            <div class="progress-header"><span>Unidades: ${p.totalUnits} / ${p.needed || 'N/A'}</span><span>${p.unitPercentage}%</span></div>
+                            <div class="progress-bar"><div class="progress-fill progress-${p.unitStatus === 'good' ? 'good' : p.unitStatus === 'warning' ? 'warning' : 'danger'}" style="width: ${p.unitPercentage}%"></div></div>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn btn-sm btn-outline" style="flex:1" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn btn-sm btn-danger" style="flex:1" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i> Eliminar</button>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn btn-sm btn-warning" style="flex:1" onclick="resetSingleProductCounts(${p.id})"><i class="fas fa-calculator"></i> Reiniciar Conteos</button>
+                            <button class="btn btn-sm btn-warning" style="flex:1" onclick="resetSingleProductNeeds(${p.id})"><i class="fas fa-flag"></i> Reiniciar Necesidad</button>
+                        </div>
+                    </div>`;
+                }
+            }).join('');
         }
 
         function renderCategories() {
@@ -1166,20 +1113,10 @@
                 <div class="category">
                     <span>${escapeHtml(cat)} (${state.products.filter(p => p.category === cat).length})</span>
                     <div class="category-actions">
-                        <span class="category-action share" onclick="shareCategory('${escapeHtml(cat)}')"><i class="fas fa-share-alt"></i></span>
                         <span class="category-action delete" onclick="deleteCategory('${escapeHtml(cat)}')"><i class="fas fa-times"></i></span>
                     </div>
                 </div>
             `).join('');
-        }
-
-        function shareCategory(category) {
-            const products = state.products.filter(p => p.category === category);
-            if (products.length === 0) return;
-            
-            const text = `📊 REPORTE: ${category}\n\n${products.map(p => `${p.name}: ${p.totalUnits}/${p.needed || 0} unidades (${p.unitPercentage}%) - ${formatCurrency(p.totalValue)}`).join('\n')}`;
-            navigator.clipboard.writeText(text);
-            showNotification('Reporte copiado al portapapeles', 'success');
         }
 
         function updateCategorySelects() {
@@ -1213,8 +1150,37 @@
                     <div class="summary-grid mt-2"><div class="summary-card"><h4 class="text-success">✓ Suficiente</h4><p>${good}</p></div><div class="summary-card"><h4 class="text-warning">⚠ Bajo</h4><p>${warning}</p></div><div class="summary-card"><h4 class="text-danger">✗ Faltante</h4><p>${danger}</p></div></div>
                 `;
             } else {
-                document.getElementById('summaryUnits').innerHTML = '<p class="text-center text-gray">Sin productos con necesidad</p>';
+                document.getElementById('summaryUnits').innerHTML = '<p class="text-center">Sin productos con necesidad</p>';
             }
+        }
+
+        function setFilter(status, btn) {
+            document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.filters.unitStatus = status;
+            renderProducts();
+        }
+
+        function clearFilters() {
+            state.filters = { search: '', category: '', unitStatus: 'all', sort: 'name' };
+            document.getElementById('filterCategory').value = '';
+            document.getElementById('search').value = '';
+            document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            document.getElementById('sortBy').value = 'name';
+            renderProducts();
+            showNotification('Filtros limpiados', 'info');
+        }
+
+        function clearSearch() {
+            document.getElementById('search').value = '';
+            state.filters.search = '';
+            renderProducts();
+        }
+
+        function toggleView() {
+            state.compactView = !state.compactView;
+            renderProducts();
         }
 
         function exportData() {
@@ -1225,6 +1191,30 @@
             a.download = `inventario-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             showNotification('Datos exportados', 'success');
+        }
+
+        function syncToCloud() {
+            localStorage.setItem('cloud_backup', JSON.stringify({ products: state.products, categories: state.categories, timestamp: Date.now() }));
+            showNotification('✅ Datos guardados en localStorage (simulando cloud)', 'success');
+        }
+
+        function loadFromCloud() {
+            const backup = localStorage.getItem('cloud_backup');
+            if (backup) {
+                const data = JSON.parse(backup);
+                if (confirm(`Cargar backup del ${new Date(data.timestamp).toLocaleString()}?`)) {
+                    state.products = data.products;
+                    state.categories = data.categories;
+                    saveData();
+                    renderProducts();
+                    updateAllSummaries();
+                    updateCategorySelects();
+                    renderCategories();
+                    showNotification('Backup cargado exitosamente', 'success');
+                }
+            } else {
+                showNotification('No hay backup guardado', 'warning');
+            }
         }
 
         function saveData() {
@@ -1239,23 +1229,43 @@
             if (savedCategories) state.categories = JSON.parse(savedCategories);
         }
 
-        function formatCurrency(value) { return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value); }
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]; }); }
-        function showNotification(msg, type) { const n = document.getElementById('notification'); n.innerHTML = `<div class="notification ${type}"><i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i><span>${msg}</span></div>`; setTimeout(() => n.innerHTML = '', 3000); }
-        function closeAllModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+        function formatCurrency(value) { 
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value); 
+        }
+        
+        function escapeHtml(str) { 
+            if (!str) return ''; 
+            return str.replace(/[&<>]/g, function(m) { 
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]; 
+            }); 
+        }
+        
+        function showNotification(msg, type) { 
+            const n = document.getElementById('notification'); 
+            n.innerHTML = `<div class="notification ${type}"><i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i><span>${msg}</span></div>`; 
+            setTimeout(() => n.innerHTML = '', 3000); 
+        }
 
-        window.editProduct = editProduct;
-        window.deleteProduct = deleteProduct;
-        window.updateCount = updateCount;
-        window.deleteCategory = deleteCategory;
-        window.shareCategory = shareCategory;
-        window.saveEditedProduct = saveEditedProduct;
-        window.exportData = exportData;
-        window.syncToGoogleSheets = syncToGoogleSheets;
-        window.loadFromGoogleSheets = loadFromGoogleSheets;
-        window.closeAllModals = closeAllModals;
+        document.getElementById('filterCategory').addEventListener('change', (e) => { 
+            state.filters.category = e.target.value; 
+            renderProducts(); 
+        });
+        
+        document.getElementById('sortBy').addEventListener('change', (e) => { 
+            state.filters.sort = e.target.value; 
+            renderProducts(); 
+        });
+        
+        document.getElementById('search').addEventListener('input', (e) => { 
+            state.filters.search = e.target.value.toLowerCase(); 
+            renderProducts(); 
+        });
 
-        initialize();
+        loadData();
+        updateCategorySelects();
+        renderCategories();
+        renderProducts();
+        updateAllSummaries();
     </script>
 </body>
 </html>
