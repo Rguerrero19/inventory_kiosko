@@ -1,10 +1,9 @@
-CONFIG
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Control de Inventario</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Sistema Control de Inventario - Multi Usuario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -81,7 +80,7 @@ CONFIG
 
         .header-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
         }
 
@@ -196,39 +195,34 @@ CONFIG
             padding-left: 1rem;
         }
 
-        /* ===== BOTONES ===== */
+        /* ===== BOTONES GRANDES PARA MÓVIL ===== */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
             border: none;
             border-radius: var(--radius-sm);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            background: var(--primary);
-            color: white;
-            font-size: 0.875rem;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+            font-size: 1rem;
+            min-height: 44px; /* Tamaño mínimo para touch */
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         .btn-sm {
-            padding: 0.5rem 1rem;
+            padding: 0.625rem 1.25rem;
             font-size: 0.875rem;
+            min-height: 40px;
         }
 
         .btn-xs {
-            padding: 0.375rem 0.75rem;
+            padding: 0.5rem 1rem;
             font-size: 0.8rem;
         }
 
@@ -242,12 +236,27 @@ CONFIG
         .btn-money:hover { background: var(--money-dark); }
         .btn-gray { background: var(--gray); }
         .btn-gray:hover { background: var(--gray-dark); }
-        .btn-reset-count { background: #f59e0b; }
-        .btn-reset-count:hover { background: #d97706; }
-        .btn-import { background: #10b981; }
-        .btn-import:hover { background: #059669; }
-        .btn-export { background: #6366f1; }
-        .btn-export:hover { background: #4f46e5; }
+        
+        /* Botones de sincronización destacados */
+        .btn-sync {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .btn-sync:active {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+        
+        .btn-load {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .btn-load:active {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+        }
 
         .btn-outline {
             background: transparent;
@@ -255,15 +264,14 @@ CONFIG
             color: #374151;
         }
 
-        .btn-outline:hover {
+        .btn-outline:active {
             background: var(--light);
-            transform: none;
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none !important;
+            transform: none;
         }
 
         /* ===== GRID DE CONTEO ===== */
@@ -317,7 +325,7 @@ CONFIG
             transition: all 0.2s;
         }
 
-        .category:hover {
+        .category:active {
             background: #d1d5db;
         }
 
@@ -336,13 +344,19 @@ CONFIG
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            min-width: 32px;
+            min-height: 32px;
+        }
+
+        .category-action:active {
+            transform: scale(0.95);
         }
 
         .category-action.share {
             color: var(--primary);
         }
 
-        .category-action.share:hover {
+        .category-action.share:active {
             background: var(--primary);
             color: white;
         }
@@ -351,7 +365,7 @@ CONFIG
             color: #f59e0b;
         }
 
-        .category-action.reset:hover {
+        .category-action.reset:active {
             background: #f59e0b;
             color: white;
         }
@@ -360,7 +374,7 @@ CONFIG
             color: var(--danger);
         }
 
-        .category-action.delete:hover {
+        .category-action.delete:active {
             background: var(--danger);
             color: white;
         }
@@ -397,9 +411,8 @@ CONFIG
             transition: all 0.2s;
         }
 
-        .product-item:hover {
+        .product-item:active {
             border-color: var(--primary);
-            box-shadow: var(--shadow);
         }
 
         .product-header {
@@ -459,17 +472,21 @@ CONFIG
         }
 
         .filter-btn {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             border: 1px solid transparent;
             border-radius: 2rem;
             font-size: 0.875rem;
             cursor: pointer;
             background: var(--light);
             transition: all 0.2s;
+            flex: 1;
+            text-align: center;
+            min-height: 44px;
         }
 
-        .filter-btn:hover {
+        .filter-btn:active {
             background: #e5e7eb;
+            transform: scale(0.98);
         }
 
         .filter-btn.active {
@@ -477,15 +494,14 @@ CONFIG
             color: white;
         }
 
-        .filter-btn[data-filter="good"] { color: var(--success); }
-        .filter-btn[data-filter="warning"] { color: var(--warning); }
-        .filter-btn[data-filter="danger"] { color: var(--danger); }
-
         /* ===== NOTIFICACIONES ===== */
         .notification {
             position: fixed;
             top: 1rem;
             right: 1rem;
+            left: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
             padding: 1rem 1.5rem;
             background: white;
             border-radius: var(--radius-sm);
@@ -495,7 +511,6 @@ CONFIG
             gap: 0.75rem;
             z-index: 1000;
             animation: slideIn 0.3s ease-out;
-            max-width: 400px;
         }
 
         .notification.success { border-left: 4px solid var(--success); }
@@ -504,8 +519,8 @@ CONFIG
         .notification.info { border-left: 4px solid var(--primary); }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         /* ===== MODAL ===== */
@@ -554,271 +569,7 @@ CONFIG
             box-shadow: var(--shadow-lg);
         }
 
-        .comparison-title {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .comparison-item {
-            text-align: center;
-            padding: 1rem;
-            background: rgba(255,255,255,0.1);
-            border-radius: var(--radius-sm);
-        }
-
-        .comparison-label {
-            font-size: 0.875rem;
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
-        }
-
-        .comparison-value {
-            font-size: 2rem;
-            font-weight: bold;
-        }
-
-        .comparison-difference {
-            text-align: center;
-            padding: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            margin-top: 0.5rem;
-        }
-
-        .difference-positive { color: #4ade80; }
-        .difference-negative { color: #f87171; }
-
-        .difference-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .comparison-progress {
-            margin-top: 1rem;
-        }
-
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.25rem;
-            font-size: 0.875rem;
-        }
-
-        .comparison-bar {
-            height: 0.75rem;
-            background: rgba(255,255,255,0.2);
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-
-        .comparison-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4ade80, #3b82f6);
-            transition: width 0.3s;
-        }
-
-        /* ===== TABS ===== */
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            background: var(--light);
-            transition: all 0.2s;
-            flex: 1;
-        }
-
-        .tab:hover {
-            background: #e5e7eb;
-        }
-
-        .tab.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* ===== TABLAS ===== */
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .comparison-table th {
-            background: var(--light);
-            padding: 10px;
-            text-align: left;
-        }
-
-        .comparison-table td {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .comparison-table tr:hover {
-            background: var(--light);
-        }
-
-        .progress-mini {
-            width: 60px;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            margin: 0 auto;
-        }
-
-        .progress-mini-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.3s;
-        }
-
-        /* ===== EMPTY STATE ===== */
-        .empty-state {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* ===== IMPORT MODAL ===== */
-        .import-options {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .import-method {
-            border: 2px solid #e5e7eb;
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .import-method:hover {
-            border-color: var(--primary);
-            background: #f0f7ff;
-        }
-
-        .import-method i {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .import-method h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .import-method p {
-            font-size: 0.875rem;
-            color: var(--gray);
-        }
-
-        .import-mode-selector {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: var(--light);
-            border-radius: var(--radius-sm);
-        }
-
-        /* ===== UTILIDADES ===== */
-        .text-success { color: var(--success); }
-        .text-warning { color: var(--warning); }
-        .text-danger { color: var(--danger); }
-        .text-money { color: var(--money); }
-        
-        .mt-2 { margin-top: 0.5rem; }
-        .mt-4 { margin-top: 1rem; }
-        .mb-2 { margin-bottom: 0.5rem; }
-        .flex { display: flex; }
-        .gap-2 { gap: 0.5rem; }
-        .gap-4 { gap: 1rem; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .w-full { width: 100%; }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .font-bold { font-weight: bold; }
-        .overflow-x-auto { overflow-x: auto; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 640px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .stats {
-                width: 100%;
-                justify-content: space-around;
-            }
-            
-            .stat {
-                min-width: auto;
-                padding: 0.5rem;
-            }
-
-            .stat-value {
-                font-size: 1.2rem;
-            }
-
-            .count-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .modal-content {
-                padding: 1rem;
-            }
-
-            .comparison-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .summary-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .filter-group {
-                flex-direction: column;
-            }
-
-            .filter-btn {
-                width: 100%;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-        }
-
+        /* ===== OTROS ESTILOS ===== */
         .search-box {
             display: flex;
             gap: 0.5rem;
@@ -843,122 +594,81 @@ CONFIG
             text-align: center;
         }
 
-        .summary-card h4 {
-            font-size: 0.875rem;
-            color: var(--gray);
-            margin-bottom: 0.5rem;
-        }
-
-        .summary-card p {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .share-options {
-            margin-top: 1.5rem;
-        }
-
-        .share-option {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border: 1px solid #e5e7eb;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .share-option:hover {
-            background: var(--light);
-            transform: translateX(5px);
-        }
-
-        .share-option.whatsapp i { color: #25D366; }
-        .share-option.email i { color: #EA4335; }
-        .share-option.copy i { color: var(--primary); }
-        .share-option.pdf i { color: #dc2626; }
-
-        .share-option i {
-            font-size: 2rem;
-        }
-
-        .share-option .info h4 {
-            margin-bottom: 0.25rem;
-        }
-
-        .share-option .info small {
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
             color: var(--gray);
         }
 
-        .reset-category-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .reset-category-item .category-info {
-            flex: 1;
-            margin-left: 1rem;
-        }
-
-        .reset-category-item .category-name {
-            font-weight: 600;
-        }
-
-        .reset-category-item .product-count {
-            font-size: 0.75rem;
-            color: var(--gray);
-        }
-
-        .reset-all-option {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--light);
-            border-radius: var(--radius-sm);
+        .empty-state i {
+            font-size: 4rem;
             margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
-        .reset-category-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-danger { color: var(--danger); }
+        .text-money { color: var(--money); }
+        
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .flex { display: flex; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .w-full { width: 100%; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .font-bold { font-weight: bold; }
+        .overflow-x-auto { overflow-x: auto; }
 
-        .radio-group {
-            display: flex;
-            gap: 1rem;
-            margin: 0.5rem 0;
-        }
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+            
+            .stat {
+                min-width: auto;
+                padding: 0.5rem;
+            }
 
-        .radio-group label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
+            .stat-value {
+                font-size: 1.2rem;
+            }
+
+            .count-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header class="header">
             <div class="logo">
                 <i class="fas fa-boxes"></i>
                 <div>
-                    <h1>Inventario Optimizado</h1>
-                    <small>Gestión de unidades y valor</small>
+                    <h1>Inventario Colaborativo</h1>
+                    <small>Trabajo en equipo - Datos compartidos</small>
                 </div>
             </div>
             <div class="header-actions">
-                <button class="btn btn-sm btn-import" onclick="openImportModal()" title="Importar productos">
-                    <i class="fas fa-file-import"></i> Importar
+                <button class="btn btn-sync" id="syncToCloudBtn" onclick="syncToGoogleSheets()">
+                    <i class="fas fa-cloud-upload-alt"></i> Guardar en Cloud
                 </button>
-                <button class="btn btn-sm btn-export" onclick="exportData()" title="Exportar productos">
+                <button class="btn btn-load" id="loadFromCloudBtn" onclick="loadFromGoogleSheets()">
+                    <i class="fas fa-cloud-download-alt"></i> Cargar desde Cloud
+                </button>
+                <button class="btn btn-sm btn-outline" onclick="exportData()">
                     <i class="fas fa-file-export"></i> Exportar
                 </button>
             </div>
@@ -978,56 +688,41 @@ CONFIG
             </div>
         </header>
 
-        <!-- Comparación de Dinero Destacada -->
         <div class="comparison-container" id="moneyComparison">
             <div class="comparison-title">
                 <i class="fas fa-chart-line"></i>
                 <span>Comparación de Valor Monetario</span>
             </div>
-            <div class="comparison-grid">
-                <div class="comparison-item">
-                    <div class="comparison-label">Valor Real en Inventario</div>
-                    <div class="comparison-value" id="comparisonReal">$0</div>
+            <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                <div class="comparison-item" style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 0.5rem;">
+                    <div class="comparison-label">Valor Real</div>
+                    <div class="comparison-value" id="comparisonReal" style="font-size: 1.5rem; font-weight: bold;">$0</div>
                 </div>
-                <div class="comparison-item">
+                <div class="comparison-item" style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 0.5rem;">
                     <div class="comparison-label">Valor Necesario</div>
-                    <div class="comparison-value" id="comparisonNeeded">$0</div>
+                    <div class="comparison-value" id="comparisonNeeded" style="font-size: 1.5rem; font-weight: bold;">$0</div>
                 </div>
             </div>
-            <div class="comparison-difference" id="comparisonDifference">
-                <div class="comparison-label">Diferencia (Real - Necesario)</div>
-                <div class="difference-value" id="differenceAmount">$0</div>
-            </div>
-            <div class="comparison-progress">
-                <div class="progress-label">
-                    <span>Progreso hacia la meta</span>
-                    <span id="comparisonPercentage">0%</span>
-                </div>
-                <div class="comparison-bar">
-                    <div class="comparison-fill" id="comparisonProgressBar" style="width: 0%"></div>
-                </div>
+            <div class="comparison-difference" id="comparisonDifference" style="text-align: center; padding: 1rem;">
+                <div class="difference-value" id="differenceAmount" style="font-size: 1.25rem; font-weight: bold;">$0</div>
             </div>
         </div>
 
-        <!-- Grid Principal -->
         <div class="grid">
-            <!-- Columna Izquierda -->
             <div>
-                <!-- Categorías -->
                 <div class="card">
                     <h2 class="card-title">
                         <i class="fas fa-tags"></i> Categorías
                     </h2>
                     <div class="flex gap-2 mb-2">
                         <input type="text" id="newCategory" placeholder="Nueva categoría" class="input-number" maxlength="50">
-                        <button class="btn btn-sm btn-success" id="addCategory" title="Agregar categoría">
-                            <i class="fas fa-plus"></i>
+                        <button class="btn btn-sm btn-success" id="addCategory">
+                            <i class="fas fa-plus"></i> Agregar
                         </button>
                     </div>
                     <div id="categories" class="categories"></div>
                 </div>
 
-                <!-- Nuevo Producto -->
                 <div class="card">
                     <h2 class="card-title">
                         <i class="fas fa-plus-circle"></i> Nuevo Producto
@@ -1040,7 +735,6 @@ CONFIG
                                 <input type="text" id="productName" required maxlength="100">
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label>Precio ($)</label>
                             <div class="input-group">
@@ -1048,7 +742,6 @@ CONFIG
                                 <input type="number" id="productPrice" min="0" step="0.01" required>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label>Categoría</label>
                             <div class="input-group">
@@ -1058,7 +751,6 @@ CONFIG
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label>Cantidad Necesaria</label>
                             <div class="input-group">
@@ -1066,68 +758,34 @@ CONFIG
                                 <input type="number" id="productNeeded" min="0" value="0" class="input-number">
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label>Conteo por Ubicación</label>
                             <div class="count-grid">
-                                <div class="count-item">
-                                    <label>Piso Venta</label>
-                                    <input type="number" id="countPiso" value="0" min="0" class="input-number">
-                                </div>
-                                <div class="count-item">
-                                    <label>Puertas</label>
-                                    <input type="number" id="countPuertas" value="0" min="0" class="input-number">
-                                </div>
-                                <div class="count-item">
-                                    <label>Cámara</label>
-                                    <input type="number" id="countCamara" value="0" min="0" class="input-number">
-                                </div>
-                                <div class="count-item">
-                                    <label>Bodega</label>
-                                    <input type="number" id="countBodega" value="0" min="0" class="input-number">
-                                </div>
-                                <div class="count-item">
-                                    <label>Merma</label>
-                                    <input type="number" id="countMerma" value="0" min="0" class="input-number">
-                                </div>
+                                <div class="count-item"><label>Piso Venta</label><input type="number" id="countPiso" value="0" min="0" class="input-number"></div>
+                                <div class="count-item"><label>Puertas</label><input type="number" id="countPuertas" value="0" min="0" class="input-number"></div>
+                                <div class="count-item"><label>Cámara</label><input type="number" id="countCamara" value="0" min="0" class="input-number"></div>
+                                <div class="count-item"><label>Bodega</label><input type="number" id="countBodega" value="0" min="0" class="input-number"></div>
+                                <div class="count-item"><label>Merma</label><input type="number" id="countMerma" value="0" min="0" class="input-number"></div>
                             </div>
                         </div>
-
-                        <!-- Vista Previa -->
-                        <div id="preview" class="progress-section" style="display: none;">
-                            <div class="progress-header">
-                                <span>Unidades: <span id="previewUnits">0/0</span></span>
-                                <span id="previewUnitsStatus" class="text-success">Suficiente</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div id="previewUnitsBar" class="progress-fill progress-good" style="width: 0%"></div>
-                            </div>
-                            <div class="progress-header mt-2">
-                                <span>Valor necesario: <span id="previewMoney">$0</span></span>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success mt-2">
+                        <button type="submit" class="btn btn-success w-full mt-2">
                             <i class="fas fa-save"></i> Guardar Producto
                         </button>
                     </form>
                 </div>
 
-                <!-- Filtros -->
                 <div class="card">
                     <h2 class="card-title">
                         <i class="fas fa-filter"></i> Filtros
                     </h2>
-                    
                     <div class="form-group">
                         <label>Categoría</label>
                         <select id="filterCategory" class="input-number">
                             <option value="">Todas</option>
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label>Estado Unidades</label>
+                        <label>Estado</label>
                         <div class="filter-group">
                             <button class="filter-btn active" data-filter="all">Todos</button>
                             <button class="filter-btn" data-filter="good">Suficiente</button>
@@ -1135,17 +793,6 @@ CONFIG
                             <button class="filter-btn" data-filter="danger">Faltante</button>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label>Estado Valor</label>
-                        <div class="filter-group">
-                            <button class="filter-btn active" data-money="all">Todos</button>
-                            <button class="filter-btn" data-money="good">Suficiente</button>
-                            <button class="filter-btn" data-money="warning">Bajo</button>
-                            <button class="filter-btn" data-money="danger">Faltante</button>
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label>Ordenar por</label>
                         <select id="sortBy" class="input-number">
@@ -1153,2104 +800,462 @@ CONFIG
                             <option value="nameDesc">Nombre Z-A</option>
                             <option value="unitsBest">Unidades (mejor)</option>
                             <option value="unitsWorst">Unidades (peor)</option>
-                            <option value="valueBest">Valor (mejor)</option>
-                            <option value="valueWorst">Valor (peor)</option>
                         </select>
                     </div>
-
-                    <div class="flex gap-2">
-                        <button class="btn btn-sm btn-outline" id="clearFilters">
-                            <i class="fas fa-undo"></i> Limpiar
-                        </button>
-                        <button class="btn btn-sm btn-reset-count" id="resetCounts">
-                            <i class="fas fa-sync-alt"></i> Reiniciar Conteos                        </button>
-                    </div>
+                    <button class="btn btn-sm btn-outline w-full" id="clearFilters">
+                        <i class="fas fa-undo"></i> Limpiar Filtros
+                    </button>
                 </div>
             </div>
 
-            <!-- Columna Derecha -->
             <div>
-                <!-- Productos -->
                 <div class="card">
                     <div class="flex justify-between items-center mb-2">
                         <h2 class="card-title" style="margin-bottom: 0;">
                             <i class="fas fa-box-open"></i> Productos
                         </h2>
-                        <div class="flex gap-2">
-                            <button class="btn btn-sm btn-outline" id="exportData" title="Exportar datos">
-                                <i class="fas fa-download"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline" id="toggleView">
-                                <i class="fas fa-list"></i> Compacta
-                            </button>
-                        </div>
+                        <button class="btn btn-sm btn-outline" id="toggleView">
+                            <i class="fas fa-list"></i> Compacta
+                        </button>
                     </div>
-
                     <div class="search-box">
                         <input type="text" id="search" placeholder="Buscar producto..." class="input-number">
-                        <button class="btn btn-sm btn-gray" id="clearSearch" title="Limpiar búsqueda">
+                        <button class="btn btn-sm btn-gray" id="clearSearch">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-
-                    <div id="searchInfo" class="text-gray" style="display: none; margin-bottom: 0.5rem;"></div>
-
                     <div id="productList" class="product-list"></div>
                 </div>
 
-                <!-- Resumen -->
                 <div class="card">
                     <h2 class="card-title">
                         <i class="fas fa-chart-pie"></i> Resumen
                     </h2>
-
-                    <div class="tabs">
-                        <button class="tab active" id="tabUnits">Unidades</button>
-                        <button class="tab" id="tabMoney">Valor</button>
-                        <button class="tab" id="tabComparison">Comparación</button>
-                    </div>
-
                     <div id="summaryUnits"></div>
-                    <div id="summaryMoney" style="display: none;"></div>
-                    <div id="summaryComparison" style="display: none;"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Edición -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <h2 class="card-title">
-                <i class="fas fa-edit"></i> Editar Producto
-            </h2>
-            <div id="editForm"></div>
-        </div>
-    </div>
-
-    <!-- Modal Compartir -->
-    <div class="modal" id="shareModal">
-        <div class="modal-content">
-            <h2 class="card-title">
-                <i class="fas fa-share-alt"></i> Compartir Reporte
-            </h2>
-            <div id="shareContent"></div>
-        </div>
-    </div>
-
-    <!-- Modal Reiniciar Conteos -->
-    <div class="modal" id="resetCountsModal">
-        <div class="modal-content">
-            <h2 class="card-title">
-                <i class="fas fa-sync-alt"></i> Reiniciar Conteos y Necesidades
-            </h2>
-            <p style="margin-bottom: 1rem; color: var(--gray);">
-                Selecciona las categorías para reiniciar los conteos y las cantidades necesarias. Los productos mantendrán su información base.
-            </p>
-            <div id="resetCountsContent"></div>
-        </div>
-    </div>
-
-    <!-- Modal Importar -->
-    <div class="modal" id="importModal">
-        <div class="modal-content">
-            <h2 class="card-title">
-                <i class="fas fa-file-import"></i> Importar Productos
-            </h2>
-            <div class="import-options">
-                <div class="import-method" onclick="document.getElementById('importFile').click()">
-                    <i class="fas fa-file-upload"></i>
-                    <h3>Importar desde archivo JSON</h3>
-                    <p>Carga un archivo .json previamente exportado</p>
-                </div>
-                
-                <div class="import-method" onclick="openTextImport()">
-                    <i class="fas fa-paste"></i>
-                    <h3>Pegar desde portapapeles</h3>
-                    <p>Copia y pega datos JSON directamente</p>
-                </div>
-                
-                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleFileImport(event)">
-            </div>
-            
-            <div id="importTextArea" style="display: none; margin-top: 1rem;">
-                <textarea id="importJsonText" placeholder="Pega aquí el contenido JSON..." rows="10"></textarea>
-                <button class="btn btn-import mt-2" onclick="handleTextImport()">
-                    <i class="fas fa-check"></i> Importar datos pegados
-                </button>
-            </div>
-            
-            <div class="import-mode-selector" id="importModeSelector" style="display: none;">
-                <h4 style="margin-bottom: 0.5rem;">Modo de importación:</h4>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="importMode" value="replace" checked>
-                        <strong>Reemplazar</strong> - Elimina productos existentes
-                    </label>
-                    <label>
-                        <input type="radio" name="importMode" value="merge">
-                        <strong>Combinar</strong> - Agrega sin eliminar existentes
-                    </label>
-                </div>
-                <button class="btn btn-import mt-2" id="confirmImport" style="display: none;">
-                    <i class="fas fa-check-circle"></i> Confirmar Importación
-                </button>
-            </div>
-            
-            <div id="importPreview" style="margin-top: 1rem;"></div>
-            
-            <div class="flex gap-2 mt-4">
-                <button class="btn btn-outline" onclick="closeAllModals()">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- Modales -->
+    <div class="modal" id="editModal"><div class="modal-content"><h2 class="card-title"><i class="fas fa-edit"></i> Editar Producto</h2><div id="editForm"></div></div></div>
+    <div class="modal" id="shareModal"><div class="modal-content"><h2 class="card-title"><i class="fas fa-share-alt"></i> Compartir Reporte</h2><div id="shareContent"></div></div></div>
     <div id="notification"></div>
 
     <script>
-        (function() {
-            'use strict';
-
-            // ========== CONFIGURACIÓN ==========
-            const CONFIG = {
-                STORAGE_KEYS: {
-                    PRODUCTS: 'inventory_products',
-                    CATEGORIES: 'inventory_categories'
-                },
-                LOCATIONS: ['piso', 'puertas', 'camara', 'bodega', 'merma'],
-                NOTIFICATION_DURATION: 3000,
-                DEBOUNCE_DELAY: 300,
-                VERSION: '2.0'
-            };
-                // ========== CONFIGURACIÓN GOOGLE SHEETS ==========
-const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbyi_wlFdNd_hgIrmiNegE30fiGV8e1ybCYscWkbo5DoQlEeD2QASQt-WdK_nilh79Thzg/exec'; // 👈 PEGA TU URL AQUÍ
-
-let syncInProgress = false;
-let lastSyncTime = localStorage.getItem('lastSyncTime') || 0;
-
-// Sincronizar datos con Google Sheets
-async function syncToGoogleSheets() {
-  if (syncInProgress) {
-    showNotification('Sincronización en curso...', 'info');
-    return;
-  }
-  
-  syncInProgress = true;
-  showNotification('Sincronizando con Google Sheets...', 'info');
-  
-  try {
-    const deviceId = localStorage.getItem('device_id') || 'web_' + Math.random().toString(36).substr(2, 9);
-    if (!localStorage.getItem('device_id')) {
-      localStorage.setItem('device_id', deviceId);
-    }
-    
-    const response = await fetch(GOOGLE_SHEETS_API, {
-      method: 'POST',
-      mode: 'no-cors', // Importante para Google Apps Script
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'save',
-        deviceId: deviceId,
-        products: state.products,
-        categories: state.categories,
-        timestamp: Date.now()
-      })
-    });
-    
-    // Nota: Con 'no-cors' no podemos leer la respuesta directamente
-    // Pero los datos sí se guardan
-    
-    localStorage.setItem('lastSyncTime', Date.now().toString());
-    showNotification('✅ Datos sincronizados con Google Sheets', 'success');
-    
-    // Opcional: recargar datos después de guardar
-    setTimeout(() => loadFromGoogleSheets(), 1000);
-    
-  } catch (error) {
-    console.error('Error al sincronizar:', error);
-    showNotification('❌ Error al sincronizar: ' + error.message, 'error');
-  } finally {
-    syncInProgress = false;
-  }
-}
-
-// Cargar datos desde Google Sheets
-async function loadFromGoogleSheets() {
-  showNotification('Cargando datos desde la nube...', 'info');
-  
-  try {
-    // Para GET, necesitamos un enfoque diferente debido a CORS
-    // Usamos JSONP o un proxy, pero Google Apps Script maneja CORS
-    
-    const response = await fetch(GOOGLE_SHEETS_API + '?t=' + Date.now(), {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (data.success && data.products && data.products.length > 0) {
-      // Verificar si los datos son más recientes que los locales
-      const localProducts = state.products.length;
-      const cloudProducts = data.products.length;
-      
-      if (cloudProducts > 0) {
-        state.products = data.products;
-        if (data.categories && data.categories.length > 0) {
-          state.categories = data.categories;
-        }
+        // ========== CONFIGURACIÓN ==========
+        // ⚠️ IMPORTANTE: Reemplaza esta URL con la de tu Google Apps Script
+        const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbx10CPFxeS8lClJWFFPteIyk8xVBkFl3pY6bFxoP4qS6meDwqqw2AoDM5LjnHPThuJuqw/exec/exec';
         
-        // Recalcular métricas de productos
-        state.products.forEach(product => {
-          updateProductMetrics(product);
-        });
-        
-        saveData(); // Guardar localmente
-        renderProducts();
-        updateAllSummaries();
-        
-        showNotification(`📥 Cargados ${cloudProducts} productos desde la nube`, 'success');
-      } else if (localProducts > 0) {
-        showNotification('Los datos locales están más actualizados', 'info');
-      }
-    } else if (data.products && data.products.length === 0) {
-      showNotification('No hay datos en la nube aún', 'info');
-    } else {
-      showNotification('No se pudieron cargar datos de la nube', 'warning');
-    }
-    
-  } catch (error) {
-    console.error('Error al cargar:', error);
-    showNotification('⚠️ Error al cargar desde la nube: ' + error.message, 'warning');
-  }
-}
+        let state = {
+            products: [],
+            categories: ['Electrónica', 'Ropa', 'Alimentos', 'Hogar'],
+            filters: { search: '', category: '', unitStatus: 'all', sort: 'name' },
+            ui: { compactView: false }
+        };
 
-// Sincronización automática cada 30 segundos
-let autoSyncInterval;
-
-function startAutoSync() {
-  if (autoSyncInterval) clearInterval(autoSyncInterval);
-  autoSyncInterval = setInterval(() => {
-    // Solo sincronizar si hay cambios (podrías agregar un dirty flag)
-    if (state.products.length > 0) {
-      syncToGoogleSheets();
-    }
-  }, 30000); // Cada 30 segundos
-}
-
-// Modificar saveData original para sincronizar automáticamente
-const originalSaveData = window.saveData || function() {
-  localStorage.setItem(CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(state.products));
-  localStorage.setItem(CONFIG.STORAGE_KEYS.CATEGORIES, JSON.stringify(state.categories));
-};
-
-// Sobrescribir saveData
-window.saveData = function() {
-  originalSaveData();
-  // Sincronizar después de guardar localmente (con debounce)
-  if (window.syncTimeout) clearTimeout(window.syncTimeout);
-  window.syncTimeout = setTimeout(() => {
-    syncToGoogleSheets();
-  }, 2000);
-};
-
-// Agregar botón de sincronización manual al header
-function addSyncButton() {
-  const headerActions = document.querySelector('.header-actions');
-  if (headerActions && !document.getElementById('googleSyncBtn')) {
-    const syncBtn = document.createElement('button');
-    syncBtn.id = 'googleSyncBtn';
-    syncBtn.className = 'btn btn-sm btn-success';
-    syncBtn.innerHTML = '<i class="fab fa-google"></i> Sincronizar';
-    syncBtn.title = 'Sincronizar con Google Sheets';
-    syncBtn.onclick = async () => {
-      await syncToGoogleSheets();
-      await loadFromGoogleSheets();
-    };
-    headerActions.appendChild(syncBtn);
-    
-    // También agregar botón de solo cargar
-    const loadBtn = document.createElement('button');
-    loadBtn.id = 'googleLoadBtn';
-    loadBtn.className = 'btn btn-sm btn-outline';
-    loadBtn.innerHTML = '<i class="fas fa-download"></i> Cargar';
-    loadBtn.title = 'Cargar desde Google Sheets';
-    loadBtn.onclick = () => loadFromGoogleSheets();
-    headerActions.appendChild(loadBtn);
-  }
-}
-
-// Iniciar sincronización automática al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    addSyncButton();
-    startAutoSync();
-    // Cargar datos de la nube al inicio
-    setTimeout(() => loadFromGoogleSheets(), 2000);
-  }, 1000);
-});
-            // ========== ESTADO GLOBAL ==========
-            let state = {
-                products: [],
-                categories: [...CONFIG.DEFAULT_CATEGORIES],
-                filters: {
-                    search: '',
-                    category: '',
-                    unitStatus: 'all',
-                    moneyStatus: 'all',
-                    sort: 'name'
-                },
-                ui: {
-                    compactView: false,
-                    activeTab: 'units',
-                    notificationTimeout: null,
-                    searchDebounceTimeout: null
-                },
-                pendingImport: null,
-                importMode: 'replace'
-            };
-
-            // ========== INICIALIZACIÓN ==========
-            document.addEventListener('DOMContentLoaded', initialize);
-
-            function initialize() {
-                loadData();
-                updateCategorySelects();
-                renderCategories();
-                renderProducts();
-                updateAllSummaries();
-                setupEventListeners();
-            }
-
-            // ========== EVENT LISTENERS ==========
-            function setupEventListeners() {
-                document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
-
-                const searchInput = document.getElementById('search');
-                searchInput.addEventListener('input', handleSearchInput);
-
-                document.getElementById('clearSearch').addEventListener('click', clearSearch);
-                document.getElementById('filterCategory').addEventListener('change', handleCategoryFilter);
+        // ========== SINCRONIZACIÓN MANUAL CON GOOGLE SHEETS ==========
+        async function syncToGoogleSheets() {
+            const btn = document.getElementById('syncToCloudBtn');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                btn.disabled = true;
                 
-                document.querySelectorAll('[data-filter]').forEach(btn => {
-                    btn.addEventListener('click', handleUnitFilterClick);
-                });
-
-                document.querySelectorAll('[data-money]').forEach(btn => {
-                    btn.addEventListener('click', handleMoneyFilterClick);
-                });
-
-                document.getElementById('sortBy').addEventListener('change', handleSortChange);
-                document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
-                document.getElementById('toggleView').addEventListener('click', toggleView);
-                document.getElementById('exportData').addEventListener('click', exportData);
-
-                document.getElementById('tabUnits').addEventListener('click', () => switchTab('units'));
-                document.getElementById('tabMoney').addEventListener('click', () => switchTab('money'));
-                document.getElementById('tabComparison').addEventListener('click', () => switchTab('comparison'));
-
-                document.getElementById('addCategory').addEventListener('click', addNewCategory);
-                document.getElementById('newCategory').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') addNewCategory();
-                });
-
-                document.getElementById('resetCounts').addEventListener('click', showResetCountsModal);
-
-                CONFIG.LOCATIONS.forEach(loc => {
-                    const input = document.getElementById(`count${capitalize(loc)}`);
-                    if (input) input.addEventListener('input', updatePreview);
-                });
+                const deviceId = localStorage.getItem('device_id') || 'user_' + Math.random().toString(36).substr(2, 9);
+                if (!localStorage.getItem('device_id')) localStorage.setItem('device_id', deviceId);
                 
-                document.getElementById('productNeeded').addEventListener('input', updatePreview);
-                document.getElementById('productPrice').addEventListener('input', updatePreview);
-
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') closeAllModals();
-                });
-
-                window.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('modal')) closeAllModals();
-                });
-
-                // Import mode listeners
-                document.querySelectorAll('input[name="importMode"]').forEach(radio => {
-                    radio.addEventListener('change', (e) => {
-                        state.importMode = e.target.value;
-                    });
-                });
-            }
-
-            function handleSearchInput(e) {
-                clearTimeout(state.ui.searchDebounceTimeout);
-                state.ui.searchDebounceTimeout = setTimeout(() => {
-                    state.filters.search = e.target.value.toLowerCase().trim();
-                    renderProducts();
-                }, CONFIG.DEBOUNCE_DELAY);
-            }
-
-            function handleCategoryFilter(e) {
-                state.filters.category = e.target.value;
-                renderProducts();
-            }
-
-            function handleUnitFilterClick(e) {
-                document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                state.filters.unitStatus = e.target.dataset.filter;
-                renderProducts();
-            }
-
-            function handleMoneyFilterClick(e) {
-                document.querySelectorAll('[data-money]').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                state.filters.moneyStatus = e.target.dataset.money;
-                renderProducts();
-            }
-
-            function handleSortChange(e) {
-                state.filters.sort = e.target.value;
-                renderProducts();
-            }
-
-            function handleProductSubmit(e) {
-                e.preventDefault();
-                saveProduct();
-            }
-
-            function clearSearch() {
-                document.getElementById('search').value = '';
-                state.filters.search = '';
-                renderProducts();
-            }
-
-            function clearAllFilters() {
-                state.filters = {
-                    search: '',
-                    category: '',
-                    unitStatus: 'all',
-                    moneyStatus: 'all',
-                    sort: 'name'
-                };
-                
-                document.getElementById('filterCategory').value = '';
-                document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
-                document.querySelector('[data-filter="all"]').classList.add('active');
-                document.querySelectorAll('[data-money]').forEach(b => b.classList.remove('active'));
-                document.querySelector('[data-money="all"]').classList.add('active');
-                document.getElementById('sortBy').value = 'name';
-                
-                renderProducts();
-                showNotification('Filtros limpiados', 'info');
-            }
-
-            function toggleView() {
-                state.ui.compactView = !state.ui.compactView;
-                const btn = document.getElementById('toggleView');
-                btn.innerHTML = state.ui.compactView ? 
-                    '<i class="fas fa-th-large"></i> Normal' : 
-                    '<i class="fas fa-list"></i> Compacta';
-                renderProducts();
-            }
-
-            function switchTab(tab) {
-                state.ui.activeTab = tab;
-                const unitsTab = document.getElementById('tabUnits');
-                const moneyTab = document.getElementById('tabMoney');
-                const comparisonTab = document.getElementById('tabComparison');
-                const summaryUnits = document.getElementById('summaryUnits');
-                const summaryMoney = document.getElementById('summaryMoney');
-                const summaryComparison = document.getElementById('summaryComparison');
-
-                [unitsTab, moneyTab, comparisonTab].forEach(t => t.classList.remove('active'));
-                [summaryUnits, summaryMoney, summaryComparison].forEach(s => s.style.display = 'none');
-
-                switch(tab) {
-                    case 'units':
-                        unitsTab.classList.add('active');
-                        summaryUnits.style.display = 'block';
-                        renderSummary();
-                        break;
-                    case 'money':
-                        moneyTab.classList.add('active');
-                        summaryMoney.style.display = 'block';
-                        renderMoneySummary();
-                        break;
-                    case 'comparison':
-                        comparisonTab.classList.add('active');
-                        summaryComparison.style.display = 'block';
-                        renderComparisonSummary();
-                        break;
-                }
-            }
-
-            // ========== FUNCIONES DE IMPORTACIÓN/EXPORTACIÓN ==========
-            function openImportModal() {
-                const modal = document.getElementById('importModal');
-                document.getElementById('importFile').value = '';
-                document.getElementById('importTextArea').style.display = 'none';
-                document.getElementById('importModeSelector').style.display = 'none';
-                document.getElementById('confirmImport').style.display = 'none';
-                document.getElementById('importPreview').innerHTML = '';
-                state.pendingImport = null;
-                modal.style.display = 'flex';
-            }
-
-            function openTextImport() {
-                document.getElementById('importTextArea').style.display = 'block';
-                document.getElementById('importModeSelector').style.display = 'block';
-                document.getElementById('confirmImport').style.display = 'inline-flex';
-            }
-
-            function handleFileImport(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                if (!file.name.endsWith('.json')) {
-                    showNotification('Por favor selecciona un archivo .json', 'error');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        processImportData(data);
-                    } catch (err) {
-                        showNotification('El archivo no es un JSON válido', 'error');
-                        console.error('Error parsing JSON:', err);
-                    }
-                };
-                reader.onerror = function() {
-                    showNotification('Error al leer el archivo', 'error');
-                };
-                reader.readAsText(file);
-            }
-
-            function handleTextImport() {
-                const text = document.getElementById('importJsonText').value.trim();
-                if (!text) {
-                    showNotification('Pega el contenido JSON primero', 'warning');
-                    return;
-                }
-
-                try {
-                    const data = JSON.parse(text);
-                    processImportData(data);
-                } catch (err) {
-                    showNotification('El texto no es un JSON válido. Verifica el formato.', 'error');
-                    console.error('Error parsing JSON:', err);
-                }
-            }
-
-            function processImportData(data) {
-                // Validar estructura
-                if (!data || (!data.products && !Array.isArray(data))) {
-                    showNotification('Formato de datos no reconocido', 'error');
-                    return;
-                }
-
-                const products = Array.isArray(data) ? data : (data.products || []);
-                const categories = data.categories || [];
-
-                if (products.length === 0) {
-                    showNotification('No se encontraron productos para importar', 'warning');
-                    return;
-                }
-
-                // Validar productos
-                const validProducts = products.filter(p => p.name && p.price);
-                const invalidCount = products.length - validProducts.length;
-
-                state.pendingImport = {
-                    products: validProducts.map(p => {
-                        // Normalizar estructura del producto
-                        const normalized = {
-                            id: p.id || Date.now() + Math.random(),
-                            name: p.name,
-                            price: parseFloat(p.price) || 0,
-                            category: p.category || '',
-                            needed: parseInt(p.needed) || 0,
-                            neededValue: parseFloat(p.neededValue) || 0,
-                            counts: {
-                                piso: parseInt(p.counts?.piso) || 0,
-                                puertas: parseInt(p.counts?.puertas) || 0,
-                                camara: parseInt(p.counts?.camara) || 0,
-                                bodega: parseInt(p.counts?.bodega) || 0,
-                                merma: parseInt(p.counts?.merma) || 0
-                            },
-                            totalUnits: 0,
-                            totalValue: 0,
-                            unitStatus: 'good',
-                            unitPercentage: 0,
-                            moneyStatus: 'good',
-                            moneyPercentage: 0
-                        };
-                        
-                        // Recalcular métricas
-                        updateProductMetrics(normalized);
-                        return normalized;
-                    }),
-                    categories: categories
-                };
-
-                // Mostrar preview
-                showImportPreview(state.pendingImport, invalidCount);
-                document.getElementById('importModeSelector').style.display = 'block';
-                document.getElementById('confirmImport').style.display = 'inline-flex';
-                
-                // Configurar evento del botón confirmar
-                document.getElementById('confirmImport').onclick = confirmImport;
-            }
-
-            function showImportPreview(importData, invalidCount) {
-                const preview = document.getElementById('importPreview');
-                
-                let html = `<div style="background: var(--light); padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
-                    <h4 style="margin-bottom: 0.5rem;">Vista previa de importación</h4>
-                    <p><strong>Productos válidos:</strong> ${importData.products.length}</p>`;
-                
-                if (invalidCount > 0) {
-                    html += `<p style="color: var(--warning);"><strong>Productos ignorados:</strong> ${invalidCount} (sin nombre o precio)</p>`;
-                }
-                
-                if (importData.categories.length > 0) {
-                    html += `<p><strong>Categorías incluidas:</strong> ${importData.categories.join(', ')}</p>`;
-                }
-                
-                html += `</div>
-                    <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.5rem;">
-                        <table class="comparison-table">
-                            <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Precio</th>
-                                    <th>Categoría</th>
-                                    <th>Unidades</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${importData.products.map(p => `
-                                    <tr>
-                                        <td>${escapeHtml(p.name)}</td>
-                                        <td>${formatCurrency(p.price)}</td>
-                                        <td>${escapeHtml(p.category) || 'N/A'}</td>
-                                        <td>${p.totalUnits}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                
-                preview.innerHTML = html;
-            }
-
-            function confirmImport() {
-                if (!state.pendingImport || state.pendingImport.products.length === 0) {
-                    showNotification('No hay datos para importar', 'warning');
-                    return;
-                }
-
-                const { products, categories } = state.pendingImport;
-                const mode = document.querySelector('input[name="importMode"]:checked')?.value || 'replace';
-
-                try {
-                    if (mode === 'replace') {
-                        // Reemplazar todos los productos
-                        state.products = products;
-                        if (categories.length > 0) {
-                            state.categories = [...new Set([...categories, ...CONFIG.DEFAULT_CATEGORIES])];
-                        }
-                    } else {
-                        // Modo merge: agregar sin duplicar por ID o nombre
-                        const existingIds = new Set(state.products.map(p => p.id));
-                        
-                        products.forEach(p => {
-                            // Si el ID ya existe, lo reemplaza; si no, lo agrega
-                            const existingIndex = state.products.findIndex(ep => ep.id === p.id);
-                            if (existingIndex >= 0) {
-                                state.products[existingIndex] = p;
-                            } else {
-                                state.products.push(p);
-                            }
-                        });
-                        
-                        if (categories.length > 0) {
-                            const newCategories = categories.filter(c => !state.categories.includes(c));
-                            state.categories = [...state.categories, ...newCategories];
-                        }
-                    }
-
-                    saveData();
-                    updateCategorySelects();
-                    renderCategories();
-                    renderProducts();
-                    updateAllSummaries();
-                    closeAllModals();
-                    
-                    const modeText = mode === 'replace' ? 'reemplazados' : 'combinados';
-                    showNotification(`Importación exitosa: ${products.length} productos ${modeText}`, 'success');
-                    
-                    state.pendingImport = null;
-                } catch (err) {
-                    showNotification('Error al importar los datos', 'error');
-                    console.error('Error importing data:', err);
-                }
-            }
-
-            function exportData() {
-                const data = {
-                    version: CONFIG.VERSION,
-                    exportDate: new Date().toISOString(),
-                    totalProducts: state.products.length,
-                    categories: state.categories,
-                    products: state.products.map(p => ({
-                        id: p.id,
-                        name: p.name,
-                        price: p.price,
-                        category: p.category,
-                        needed: p.needed,
-                        neededValue: p.neededValue,
-                        counts: p.counts,
-                        totalUnits: p.totalUnits,
-                        totalValue: p.totalValue
-                    }))
-                };
-
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `inventario-backup-${new Date().toISOString().split('T')[0]}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-                
-                showNotification(`${data.totalProducts} productos exportados correctamente`, 'success');
-            }
-
-            // ========== FUNCIONES DE CATEGORÍAS ==========
-            function addNewCategory() {
-                const input = document.getElementById('newCategory');
-                const name = input.value.trim();
-                
-                if (!name) {
-                    showNotification('Ingresa un nombre para la categoría', 'warning');
-                    return;
-                }
-
-                if (state.categories.includes(name)) {
-                    showNotification('La categoría ya existe', 'warning');
-                    return;
-                }
-
-                state.categories.push(name);
-                saveData();
-                updateCategorySelects();
-                renderCategories();
-                input.value = '';
-                showNotification('Categoría agregada', 'success');
-            }
-
-            function deleteCategory(name) {
-                if (!confirm(`¿Eliminar categoría "${name}"?`)) return;
-                
-                state.categories = state.categories.filter(c => c !== name);
-                state.products.forEach(p => {
-                    if (p.category === name) p.category = '';
-                });
-                
-                saveData();
-                updateCategorySelects();
-                renderCategories();
-                renderProducts();
-                updateAllSummaries();
-                showNotification('Categoría eliminada', 'success');
-            }
-
-            // ========== FUNCIONES DE PRODUCTO ==========
-            function saveProduct() {
-                const name = document.getElementById('productName').value.trim();
-                const price = parseFloat(document.getElementById('productPrice').value);
-                const category = document.getElementById('productCategory').value;
-                const needed = parseInt(document.getElementById('productNeeded').value) || 0;
-
-                if (!name || !price || !category) {
-                    showNotification('Complete todos los campos requeridos', 'error');
-                    return;
-                }
-
-                if (price <= 0) {
-                    showNotification('El precio debe ser mayor a 0', 'error');
-                    return;
-                }
-
-                const counts = {};
-                CONFIG.LOCATIONS.forEach(loc => {
-                    counts[loc] = parseInt(document.getElementById(`count${capitalize(loc)}`).value) || 0;
-                });
-
-                const totalUnits = Object.values(counts).reduce((a, b) => a + b, 0);
-                const totalValue = price * totalUnits;
-                const neededValue = price * needed;
-
-                const product = {
-                    id: Date.now(),
-                    name,
-                    price,
-                    category,
-                    needed,
-                    neededValue,
-                    counts,
-                    totalUnits,
-                    totalValue,
-                    unitStatus: getUnitStatus(totalUnits, needed),
-                    unitPercentage: calculatePercentage(totalUnits, needed),
-                    moneyStatus: getMoneyStatus(totalValue, neededValue),
-                    moneyPercentage: calculatePercentage(totalValue, neededValue)
-                };
-
-                state.products.push(product);
-                saveData();
-                renderProducts();
-                updateAllSummaries();
-                
-                document.getElementById('productForm').reset();
-                CONFIG.LOCATIONS.forEach(loc => {
-                    document.getElementById(`count${capitalize(loc)}`).value = 0;
-                });
-                document.getElementById('productNeeded').value = 0;
-                document.getElementById('preview').style.display = 'none';
-                
-                showNotification('Producto guardado', 'success');
-            }
-
-            function editProduct(id) {
-                const product = state.products.find(p => p.id === id);
-                if (!product) return;
-
-                const modal = document.getElementById('editModal');
-                const form = document.getElementById('editForm');
-
-                const categoryOptions = state.categories.map(cat => 
-                    `<option value="${escapeHtml(cat)}" ${product.category === cat ? 'selected' : ''}>${escapeHtml(cat)}</option>`
-                ).join('');
-
-                form.innerHTML = `
-                    <form id="editProductForm" onsubmit="event.preventDefault(); saveEditedProduct(${id})">
-                        <div class="form-group">
-                            <label>Nombre</label>
-                            <input type="text" id="editName" value="${escapeHtml(product.name)}" class="input-number" required maxlength="100">
-                        </div>
-                        <div class="form-group">
-                            <label>Precio</label>
-                            <input type="number" id="editPrice" value="${product.price}" step="0.01" min="0" class="input-number" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Categoría</label>
-                            <select id="editCategory" class="input-number" required>
-                                <option value="">Seleccionar</option>
-                                ${categoryOptions}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Necesario</label>
-                            <input type="number" id="editNeeded" value="${product.needed}" min="0" class="input-number">
-                        </div>
-                        <div class="count-grid">
-                            ${CONFIG.LOCATIONS.map(loc => `
-                                <div class="count-item">
-                                    <label>${capitalize(loc)}</label>
-                                    <input type="number" id="edit${capitalize(loc)}" value="${product.counts[loc]}" min="0" class="input-number">
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-success">Guardar</button>
-                            <button type="button" class="btn btn-danger" onclick="deleteProduct(${id})">Eliminar</button>
-                            <button type="button" class="btn btn-outline" onclick="closeAllModals()">Cancelar</button>
-                        </div>
-                    </form>
-                `;
-
-                modal.style.display = 'flex';
-            }
-
-            function saveEditedProduct(id) {
-                const product = state.products.find(p => p.id === id);
-                if (!product) return;
-
-                const newName = document.getElementById('editName').value.trim();
-                const newPrice = parseFloat(document.getElementById('editPrice').value);
-                const newCategory = document.getElementById('editCategory').value;
-                const newNeeded = parseInt(document.getElementById('editNeeded').value) || 0;
-
-                if (!newName || !newPrice || !newCategory) {
-                    showNotification('Complete todos los campos requeridos', 'error');
-                    return;
-                }
-
-                if (newPrice <= 0) {
-                    showNotification('El precio debe ser mayor a 0', 'error');
-                    return;
-                }
-
-                Object.assign(product, {
-                    name: newName,
-                    price: newPrice,
-                    category: newCategory,
-                    needed: newNeeded
-                });
-                
-                CONFIG.LOCATIONS.forEach(loc => {
-                    product.counts[loc] = parseInt(document.getElementById(`edit${capitalize(loc)}`).value) || 0;
-                });
-
-                updateProductMetrics(product);
-
-                saveData();
-                renderProducts();
-                updateAllSummaries();
-                closeAllModals();
-                showNotification('Producto actualizado', 'success');
-            }
-
-            function deleteProduct(id) {
-                if (!confirm('¿Eliminar producto?')) return;
-                
-                state.products = state.products.filter(p => p.id !== id);
-                saveData();
-                renderProducts();
-                updateAllSummaries();
-                closeAllModals();
-                showNotification('Producto eliminado', 'success');
-            }
-
-            function updateCount(productId, field, value) {
-                const product = state.products.find(p => p.id === productId);
-                if (!product) return;
-
-                const numValue = parseInt(value) || 0;
-                if (numValue < 0) return;
-
-                product.counts[field] = numValue;
-                updateProductMetrics(product);
-
-                saveData();
-                renderProducts();
-                updateAllSummaries();
-            }
-
-            function updateProductMetrics(product) {
-                product.totalUnits = Object.values(product.counts).reduce((a, b) => a + b, 0);
-                product.totalValue = product.price * product.totalUnits;
-                product.neededValue = product.price * product.needed;
-                product.unitStatus = getUnitStatus(product.totalUnits, product.needed);
-                product.unitPercentage = calculatePercentage(product.totalUnits, product.needed);
-                product.moneyStatus = getMoneyStatus(product.totalValue, product.neededValue);
-                product.moneyPercentage = calculatePercentage(product.totalValue, product.neededValue);
-            }
-
-            // ========== FUNCIONES DE ESTADO ==========
-            function getUnitStatus(found, needed) {
-                if (needed <= 0) return 'none';
-                if (found >= needed) return 'good';
-                if (found >= needed * 0.5) return 'warning';
-                return 'danger';
-            }
-
-            function getMoneyStatus(found, needed) {
-                if (needed <= 0) return 'none';
-                if (found >= needed) return 'good';
-                if (found >= needed * 0.5) return 'warning';
-                return 'danger';
-            }
-
-            function calculatePercentage(value, total) {
-                if (total <= 0) return 0;
-                return Math.min(100, Math.round((value / total) * 100));
-            }
-
-            // ========== FUNCIONES DE COMPARACIÓN ==========
-            function updateMoneyComparison() {
-                const totalValue = state.products.reduce((sum, p) => sum + p.totalValue, 0);
-                const totalNeeded = state.products.reduce((sum, p) => sum + (p.neededValue || 0), 0);
-                const difference = totalValue - totalNeeded;
-                const percentage = totalNeeded > 0 ? Math.min(100, Math.round((totalValue / totalNeeded) * 100)) : 0;
-
-                document.getElementById('comparisonReal').textContent = formatCurrency(totalValue);
-                document.getElementById('comparisonNeeded').textContent = formatCurrency(totalNeeded);
-                
-                const differenceElement = document.getElementById('differenceAmount');
-                const absDiff = Math.abs(difference);
-                differenceElement.textContent = `${formatCurrency(absDiff)} ${difference >= 0 ? 'sobrante' : 'faltante'}`;
-                
-                const differenceContainer = document.getElementById('comparisonDifference');
-                differenceContainer.className = `comparison-difference ${difference >= 0 ? 'difference-positive' : 'difference-negative'}`;
-                
-                document.getElementById('comparisonPercentage').textContent = `${percentage}%`;
-                document.getElementById('comparisonProgressBar').style.width = `${percentage}%`;
-                
-                const progressBar = document.getElementById('comparisonProgressBar');
-                progressBar.style.background = percentage >= 100 ? 'linear-gradient(90deg, #4ade80, #16a34a)' :
-                                              percentage >= 50 ? 'linear-gradient(90deg, #fbbf24, #f59e0b)' :
-                                              'linear-gradient(90deg, #f87171, #dc2626)';
-            }
-
-            function renderComparisonSummary() {
-                const productsWithNeeded = state.products.filter(p => p.needed > 0);
-                const container = document.getElementById('summaryComparison');
-                
-                if (productsWithNeeded.length === 0) {
-                    container.innerHTML = '<p class="text-center text-gray">Sin datos para comparar</p>';
-                    return;
-                }
-
-                const categoriesWithTotals = {};
-                state.products.forEach(p => {
-                    if (!categoriesWithTotals[p.category]) {
-                        categoriesWithTotals[p.category] = {
-                            totalValue: 0,
-                            neededValue: 0,
-                            count: 0
-                        };
-                    }
-                    categoriesWithTotals[p.category].totalValue += p.totalValue;
-                    categoriesWithTotals[p.category].neededValue += p.neededValue || 0;
-                    categoriesWithTotals[p.category].count++;
-                });
-
-                const categoryRows = Object.entries(categoriesWithTotals)
-                    .filter(([_, data]) => data.neededValue > 0)
-                    .map(([category, data]) => {
-                        const difference = data.totalValue - data.neededValue;
-                        const percentage = calculatePercentage(data.totalValue, data.neededValue);
-                        const progressColor = percentage >= 100 ? '#16a34a' : percentage >= 50 ? '#f59e0b' : '#dc2626';
-                        
-                        return `
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${escapeHtml(category)} (${data.count})</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${formatCurrency(data.totalValue)}</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${formatCurrency(data.neededValue)}</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right; color: ${difference >= 0 ? '#16a34a' : '#dc2626'};">
-                                    ${formatCurrency(difference)}
-                                </td>
-                                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">
-                                    <div class="progress-mini">
-                                        <div class="progress-mini-fill" style="width: ${percentage}%; background: ${progressColor};"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-                    }).join('');
-
-                container.innerHTML = `
-                    <div class="overflow-x-auto">
-                        <table class="comparison-table">
-                            <thead>
-                                <tr>
-                                    <th>Categoría</th>
-                                    <th style="text-align: right;">Valor Real</th>
-                                    <th style="text-align: right;">Valor Nec.</th>
-                                    <th style="text-align: right;">Diferencia</th>
-                                    <th style="text-align: center;">Progreso</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${categoryRows}
-                            </tbody>
-                        </table>
-                    </div>
-                    <p class="mt-2 text-center text-gray">
-                        * Diferencia positiva indica sobrante, negativa indica faltante
-                    </p>
-                `;
-            }
-
-            // ========== FUNCIONES DE REINICIO ==========
-            function resetProductCounts(product) {
-                CONFIG.LOCATIONS.forEach(loc => {
-                    product.counts[loc] = 0;
-                });
-                
-                product.needed = 0;
-                product.neededValue = 0;
-                updateProductMetrics(product);
-            }
-
-            function resetCategoryCounts(categoryName) {
-                if (!confirm(`¿Reiniciar conteos y necesidades de la categoría "${categoryName}"?`)) return;
-
-                let resetCount = 0;
-                state.products.forEach(p => {
-                    if (p.category === categoryName) {
-                        resetProductCounts(p);
-                        resetCount++;
-                    }
-                });
-                
-                saveData();
-                renderProducts();
-                updateAllSummaries();
-                renderCategories();
-                
-                showNotification(
-                    resetCount > 0 
-                        ? `Conteos y necesidades reiniciados para ${resetCount} productos` 
-                        : `No hay productos en la categoría ${categoryName}`,
-                    resetCount > 0 ? 'success' : 'warning'
-                );
-            }
-
-            function resetMultipleCategories(categoriesToReset) {
-                if (categoriesToReset.length === 0) {
-                    showNotification('Selecciona al menos una categoría', 'warning');
-                    return;
-                }
-
-                if (!confirm(`¿Reiniciar conteos y necesidades de ${categoriesToReset.length} categoría(s)?`)) return;
-
-                let totalReset = 0;
-                categoriesToReset.forEach(catName => {
-                    state.products.forEach(p => {
-                        if (p.category === catName) {
-                            resetProductCounts(p);
-                            totalReset++;
-                        }
-                    });
-                });
-
-                saveData();
-                renderProducts();
-                updateAllSummaries();
-                renderCategories();
-                closeAllModals();
-                
-                showNotification(`Conteos y necesidades reiniciados para ${totalReset} productos`, 'success');
-            }
-
-            function resetAllCounts() {
-                if (!confirm('¿Reiniciar TODOS los conteos y necesidades?')) return;
-                
-                state.products.forEach(resetProductCounts);
-                
-                saveData();
-                renderProducts();
-                updateAllSummaries();
-                renderCategories();
-                closeAllModals();
-                showNotification('Todos los conteos y necesidades han sido reiniciados', 'success');
-            }
-
-            // ========== MODAL DE REINICIO ==========
-            function showResetCountsModal() {
-                const modal = document.getElementById('resetCountsModal');
-                const content = document.getElementById('resetCountsContent');
-                
-                const categoriesWithProducts = state.categories.filter(cat => 
-                    state.products.some(p => p.category === cat)
-                );
-
-                if (categoriesWithProducts.length === 0) {
-                    showNotification('No hay productos en ninguna categoría', 'warning');
-                    return;
-                }
-
-                const categoryItems = categoriesWithProducts.map(cat => {
-                    const productCount = state.products.filter(p => p.category === cat).length;
-                    return `
-                        <div class="reset-category-item">
-                            <input type="checkbox" class="category-checkbox" value="${escapeHtml(cat)}">
-                            <div class="category-info">
-                                <div class="category-name">${escapeHtml(cat)}</div>
-                                <div class="product-count">${productCount} producto(s)</div>
-                            </div>
-                            <button class="btn btn-sm btn-reset-count" onclick="resetCategoryCounts('${escapeHtml(cat)}')" style="width: auto;">
-                                <i class="fas fa-sync-alt"></i> Reiniciar
-                            </button>
-                        </div>
-                    `;
-                }).join('');
-
-                content.innerHTML = `
-                    <div class="reset-all-option">
-                        <input type="checkbox" id="selectAllCategories">
-                        <div>
-                            <strong>Seleccionar todas</strong>
-                            <br>
-                            <small>Reiniciar conteos y necesidades de todas las categorías</small>
-                        </div>
-                    </div>
-                    <div class="reset-category-list">
-                        ${categoryItems}
-                    </div>
-                    <div class="flex gap-2 mt-4">
-                        <button class="btn btn-reset-count" id="resetSelectedBtn">
-                            <i class="fas fa-sync-alt"></i> Reiniciar Seleccionadas
-                        </button>
-                        <button class="btn btn-danger" id="resetAllBtn">
-                            <i class="fas fa-sync-alt"></i> Reiniciar Todo
-                        </button>
-                        <button class="btn btn-outline" onclick="closeAllModals()">Cancelar</button>
-                    </div>
-                `;
-
-                document.getElementById('selectAllCategories').addEventListener('change', function(e) {
-                    document.querySelectorAll('.category-checkbox').forEach(cb => {
-                        cb.checked = e.target.checked;
-                    });
-                });
-
-                document.getElementById('resetSelectedBtn').addEventListener('click', () => {
-                    const checkboxes = document.querySelectorAll('.category-checkbox:checked');
-                    const categoriesToReset = Array.from(checkboxes).map(cb => cb.value);
-                    resetMultipleCategories(categoriesToReset);
-                });
-
-                document.getElementById('resetAllBtn').addEventListener('click', resetAllCounts);
-
-                modal.style.display = 'flex';
-            }
-
-            // ========== COMPARTIR CATEGORÍA ==========
-            function shareCategory(category) {
-                const modal = document.getElementById('shareModal');
-                const content = document.getElementById('shareContent');
-                
-                const categoryProducts = state.products.filter(p => p.category === category);
-                
-                if (categoryProducts.length === 0) {
-                    showNotification('No hay productos en esta categoría', 'warning');
-                    return;
-                }
-
-                const summary = calculateCategorySummary(categoryProducts);
-                const productsTable = generateProductsTable(categoryProducts);
-
-                content.innerHTML = `
-                    <div style="margin-bottom: 1.5rem;">
-                        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Categoría: ${escapeHtml(category)}</h3>
-                        <p style="color: var(--gray); margin-bottom: 1rem;">Reporte generado el ${new Date().toLocaleString()}</p>
-                        
-                        <div style="background: var(--light); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
-                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
-                                ${Object.entries(summary).map(([key, value]) => `
-                                    <div>
-                                        <div style="font-size: 0.875rem; color: var(--gray);">${key}</div>
-                                        <div style="font-size: 1.5rem; font-weight: bold;">${value}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="comparison-table">
-                                <thead>
-                                    <tr>
-                                        <th>Producto</th>
-                                        <th style="text-align: center;">Stock</th>
-                                        <th style="text-align: center;">Necesario</th>
-                                        <th style="text-align: right;">Valor Stock</th>
-                                        <th style="text-align: right;">Valor Nec.</th>
-                                        <th style="text-align: center;">Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${productsTable}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="share-options">
-                            <h4 style="margin: 1rem 0 0.5rem;">Compartir vía:</h4>
-                            
-                            <div class="share-option whatsapp" onclick="shareViaWhatsApp('${escapeHtml(category)}')">
-                                <i class="fab fa-whatsapp"></i>
-                                <div class="info">
-                                    <h4>WhatsApp</h4>
-                                    <small>Compartir reporte por WhatsApp</small>
-                                </div>
-                            </div>
-
-                            <div class="share-option email" onclick="shareViaEmail('${escapeHtml(category)}')">
-                                <i class="far fa-envelope"></i>
-                                <div class="info">
-                                    <h4>Email</h4>
-                                    <small>Enviar por correo electrónico</small>
-                                </div>
-                            </div>
-
-                            <div class="share-option copy" onclick="copyToClipboard('${escapeHtml(category)}')">
-                                <i class="far fa-copy"></i>
-                                <div class="info">
-                                    <h4>Copiar al portapapeles</h4>
-                                    <small>Copiar reporte como texto</small>
-                                </div>
-                            </div>
-
-                            <div class="share-option pdf" onclick="generatePDF('${escapeHtml(category)}')">
-                                <i class="fas fa-file-pdf"></i>
-                                <div class="info">
-                                    <h4>Generar PDF</h4>
-                                    <small>Descargar reporte en PDF con colores</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-2 mt-4">
-                        <button class="btn btn-outline" onclick="closeAllModals()">Cerrar</button>
-                    </div>
-                `;
-
-                modal.style.display = 'flex';
-            }
-
-            function calculateCategorySummary(products) {
-                const totalProducts = products.length;
-                const totalUnits = products.reduce((sum, p) => sum + p.totalUnits, 0);
-                const totalNeeded = products.reduce((sum, p) => sum + p.needed, 0);
-                const totalValue = products.reduce((sum, p) => sum + p.totalValue, 0);
-                const totalNeededValue = products.reduce((sum, p) => sum + p.neededValue, 0);
-                
-                return {
-                    'Productos': totalProducts,
-                    'Unidades': `${totalUnits}/${totalNeeded}`,
-                    'Valor Real': formatCurrency(totalValue),
-                    'Valor Nec.': formatCurrency(totalNeededValue)
-                };
-            }
-
-            function generateProductsTable(products) {
-                return products.map(p => `
-                    <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">${escapeHtml(p.name)}</td>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${p.totalUnits}</td>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${p.needed || 0}</td>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${formatCurrency(p.totalValue)}</td>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${formatCurrency(p.neededValue)}</td>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">
-                            <span style="color: ${getStatusColor(p.unitStatus)}">
-                                ${getStatusIcon(p.unitStatus)} ${getStatusText(p.unitStatus)}
-                            </span>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            function generateReportText(category) {
-                const categoryProducts = state.products.filter(p => p.category === category);
-                if (categoryProducts.length === 0) return '';
-
-                const summary = calculateCategorySummary(categoryProducts);
-                const date = new Date().toLocaleString();
-
-                let text = `📊 REPORTE DE INVENTARIO - ${category.toUpperCase()}\n`;
-                text += `📅 ${date}\n`;
-                text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-                
-                text += `📈 RESUMEN:\n`;
-                Object.entries(summary).forEach(([key, value]) => {
-                    text += `• ${key}: ${value}\n`;
-                });
-                text += `\n📦 DETALLE DE PRODUCTOS:\n`;
-                text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-                
-                categoryProducts.forEach(p => {
-                    text += `\n${p.name}\n`;
-                    text += `  ${getStatusIcon(p.unitStatus)} Stock: ${p.totalUnits} / ${p.needed || 0} (${p.unitPercentage}%)\n`;
-                    text += `  💰 Valor: ${formatCurrency(p.totalValue)} / ${formatCurrency(p.neededValue)}\n`;
-                    text += `  📍 Ubicaciones: ${CONFIG.LOCATIONS.map(loc => `${capitalize(loc)}:${p.counts[loc]}`).join(' ')}\n`;
-                });
-                
-                text += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-                text += `Reporte generado por Sistema de Inventario Optimizado`;
-                
-                return text;
-            }
-
-            function shareViaWhatsApp(category) {
-                const text = generateReportText(category);
-                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-                closeAllModals();
-            }
-
-            function shareViaEmail(category) {
-                const text = generateReportText(category);
-                const subject = `Reporte de Inventario - ${category}`;
-                window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`, '_blank');
-                closeAllModals();
-            }
-
-            function copyToClipboard(category) {
-                const text = generateReportText(category);
-                navigator.clipboard.writeText(text)
-                    .then(() => {
-                        showNotification('Reporte copiado al portapapeles', 'success');
-                        closeAllModals();
+                const response = await fetch(GOOGLE_SHEETS_API, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'save',
+                        deviceId: deviceId,
+                        products: state.products,
+                        categories: state.categories,
+                        timestamp: Date.now(),
+                        version: '2.0'
                     })
-                    .catch(() => showNotification('Error al copiar al portapapeles', 'error'));
+                });
+                
+                showNotification('✅ Datos guardados en la nube exitosamente', 'success');
+                localStorage.setItem('lastSyncTime', Date.now().toString());
+                
+            } catch (error) {
+                console.error('Error al guardar:', error);
+                showNotification('❌ Error al guardar: ' + error.message, 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
+        }
 
-            // ========== FUNCIÓN MEJORADA DE GENERACIÓN DE PDF CON COLORES ==========
-            function generatePDF(category) {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
+        async function loadFromGoogleSheets() {
+            const btn = document.getElementById('loadFromCloudBtn');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
+                btn.disabled = true;
                 
-                const categoryProducts = state.products.filter(p => p.category === category);
+                const response = await fetch(GOOGLE_SHEETS_API + '?t=' + Date.now(), {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
                 
-                if (categoryProducts.length === 0) {
-                    showNotification('No hay productos en esta categoría', 'warning');
-                    return;
-                }
-
-                const summary = calculateCategorySummary(categoryProducts);
-
-                // Título con color
-                doc.setFontSize(18);
-                doc.setTextColor(37, 99, 235);
-                doc.text(`Reporte de Inventario - ${category}`, 14, 22);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
-                doc.setFontSize(10);
-                doc.setTextColor(100, 100, 100);
-                doc.text(`Generado: ${new Date().toLocaleString()}`, 14, 30);
-
-                // Resumen
-                doc.setFontSize(12);
-                doc.setTextColor(0, 0, 0);
-                doc.text('Resumen:', 14, 40);
-                doc.setFontSize(10);
-                let y = 48;
-                Object.entries(summary).forEach(([key, value]) => {
-                    doc.text(`${key}: ${value}`, 14, y);
-                    y += 7;
-                });
-
-                // Preparar datos de la tabla con colores según estado
-                const tableBody = categoryProducts.map(p => {
-                    let estadoTexto = '';
-                    let estadoColor = '';
-                    
-                    switch(p.unitStatus) {
-                        case 'good':
-                            estadoTexto = '✓ Suficiente';
-                            estadoColor = [22, 163, 74]; // Verde
-                            break;
-                        case 'warning':
-                            estadoTexto = '⚠ Bajo';
-                            estadoColor = [202, 138, 4]; // Amarillo
-                            break;
-                        case 'danger':
-                            estadoTexto = '✗ Faltante';
-                            estadoColor = [220, 38, 38]; // Rojo
-                            break;
-                        default:
-                            estadoTexto = '• Sin necesidad';
-                            estadoColor = [107, 114, 128]; // Gris
-                    }
-                    
-                    return [
-                        p.name,
-                        p.totalUnits.toString(),
-                        p.needed?.toString() || '0',
-                        formatCurrency(p.totalValue),
-                        formatCurrency(p.neededValue),
-                        { content: estadoTexto, styles: { textColor: estadoColor, fontStyle: 'bold' } }
-                    ];
-                });
-
-                // Definir colores de fondo por fila según el estado
-                const rowColors = categoryProducts.map(p => {
-                    switch(p.unitStatus) {
-                        case 'good': return [220, 252, 231]; // Verde claro
-                        case 'warning': return [254, 252, 232]; // Amarillo claro
-                        case 'danger': return [254, 226, 226]; // Rojo claro
-                        default: return null;
-                    }
-                });
-
-                // Generar tabla con colores de fondo por fila
-                doc.autoTable({
-                    startY: y + 10,
-                    head: [['Producto', 'Stock', 'Necesario', 'Valor Stock', 'Valor Nec.', 'Estado']],
-                    body: tableBody,
-                    theme: 'striped',
-                    headStyles: { 
-                        fillColor: [37, 99, 235],
-                        textColor: [255, 255, 255],
-                        fontStyle: 'bold',
-                        halign: 'center'
-                    },
-                    styles: { 
-                        fontSize: 9,
-                        cellPadding: 3
-                    },
-                    columnStyles: {
-                        0: { cellWidth: 40 },
-                        1: { cellWidth: 20, halign: 'center' },
-                        2: { cellWidth: 20, halign: 'center' },
-                        3: { cellWidth: 25, halign: 'right' },
-                        4: { cellWidth: 25, halign: 'right' },
-                        5: { cellWidth: 25, halign: 'center' }
-                    },
-                    didParseCell: function(data) {
-                        // Aplicar color de fondo a toda la fila
-                        if (data.section === 'body' && rowColors[data.row.index]) {
-                            data.cell.styles.fillColor = rowColors[data.row.index];
+                const data = await response.json();
+                
+                if (data.success && data.products && data.products.length > 0) {
+                    if (confirm(`Se encontraron ${data.products.length} productos en la nube. ¿Deseas cargarlos? (Esto reemplazará los datos locales)`)) {
+                        state.products = data.products;
+                        if (data.categories && data.categories.length > 0) {
+                            state.categories = data.categories;
                         }
+                        saveData();
+                        renderProducts();
+                        updateAllSummaries();
+                        updateCategorySelects();
+                        renderCategories();
+                        showNotification(`📥 Cargados ${data.products.length} productos desde la nube`, 'success');
                     }
-                });
-
-                // Agregar leyenda de colores al final del PDF
-                const finalY = doc.lastAutoTable.finalY + 10;
-                
-                doc.setFontSize(10);
-                doc.setTextColor(0, 0, 0);
-                doc.text('Leyenda de Estados:', 14, finalY);
-                
-                // Verde - Suficiente
-                doc.setFillColor(22, 163, 74);
-                doc.rect(14, finalY + 5, 8, 8, 'F');
-                doc.setTextColor(0, 0, 0);
-                doc.text('Suficiente (Stock >= Necesario)', 25, finalY + 12);
-                
-                // Amarillo - Bajo
-                doc.setFillColor(202, 138, 4);
-                doc.rect(14, finalY + 15, 8, 8, 'F');
-                doc.text('Bajo (Stock entre 50% y 99% de lo necesario)', 25, finalY + 22);
-                
-                // Rojo - Faltante
-                doc.setFillColor(220, 38, 38);
-                doc.rect(14, finalY + 25, 8, 8, 'F');
-                doc.text('Faltante (Stock < 50% de lo necesario)', 25, finalY + 32);
-                
-                doc.save(`inventario-${category}.pdf`);
-                closeAllModals();
-                showNotification('PDF generado correctamente con colores', 'success');
-            }
-
-            // ========== RENDERIZADO ==========
-            function renderProducts() {
-                let filtered = filterProducts();
-                filtered = sortProducts(filtered);
-
-                updateSearchInfo(filtered.length);
-                
-                if (filtered.length === 0) {
-                    renderEmptyState();
-                    return;
-                }
-
-                const html = filtered.map(p => state.ui.compactView ? renderCompactProduct(p) : renderFullProduct(p)).join('');
-                document.getElementById('productList').innerHTML = html;
-            }
-
-            function filterProducts() {
-                return state.products.filter(p => {
-                    if (state.filters.search && !p.name.toLowerCase().includes(state.filters.search) && 
-                        !p.category.toLowerCase().includes(state.filters.search)) {
-                        return false;
-                    }
-                    if (state.filters.category && p.category !== state.filters.category) return false;
-                    if (state.filters.unitStatus !== 'all' && p.unitStatus !== state.filters.unitStatus) return false;
-                    if (state.filters.moneyStatus !== 'all' && p.moneyStatus !== state.filters.moneyStatus) return false;
-                    return true;
-                });
-            }
-
-            function sortProducts(productsToSort) {
-                const sortFunctions = {
-                    'name': (a, b) => a.name.localeCompare(b.name),
-                    'nameDesc': (a, b) => b.name.localeCompare(a.name),
-                    'unitsBest': (a, b) => getStatusOrder(a.unitStatus) - getStatusOrder(b.unitStatus),
-                    'unitsWorst': (a, b) => getStatusOrder(b.unitStatus) - getStatusOrder(a.unitStatus),
-                    'valueBest': (a, b) => getMoneyStatusOrder(a.moneyStatus) - getMoneyStatusOrder(b.moneyStatus),
-                    'valueWorst': (a, b) => getMoneyStatusOrder(b.moneyStatus) - getMoneyStatusOrder(a.moneyStatus)
-                };
-
-                const sortFn = sortFunctions[state.filters.sort] || sortFunctions.name;
-                return [...productsToSort].sort(sortFn);
-            }
-
-            function getStatusOrder(status) {
-                const order = { 'good': 1, 'warning': 2, 'danger': 3, 'none': 4 };
-                return order[status] || 5;
-            }
-
-            function getMoneyStatusOrder(status) {
-                const order = { 'good': 1, 'warning': 2, 'danger': 3, 'none': 4 };
-                return order[status] || 5;
-            }
-
-            function updateSearchInfo(count) {
-                const searchInfo = document.getElementById('searchInfo');
-                if (state.filters.search) {
-                    searchInfo.style.display = 'block';
-                    searchInfo.textContent = `Encontrados: ${count} producto${count !== 1 ? 's' : ''}`;
+                } else if (data.products && data.products.length === 0) {
+                    showNotification('No hay datos guardados en la nube aún', 'info');
                 } else {
-                    searchInfo.style.display = 'none';
+                    showNotification('No se pudieron cargar datos de la nube', 'warning');
                 }
+                
+            } catch (error) {
+                console.error('Error al cargar:', error);
+                showNotification('⚠️ Error al cargar: ' + error.message, 'warning');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
+        }
 
-            function renderEmptyState() {
-                document.getElementById('productList').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-box-open"></i>
-                        <p>No hay productos</p>
-                        ${state.filters.search ? '<p>Intenta con otra búsqueda</p>' : ''}
-                    </div>
-                `;
-            }
+        // ========== FUNCIONES PRINCIPALES ==========
+        function initialize() {
+            loadData();
+            updateCategorySelects();
+            renderCategories();
+            renderProducts();
+            updateAllSummaries();
+            setupEventListeners();
+        }
 
-            function renderCompactProduct(p) {
-                return `
-                    <div class="product-item">
-                        <div class="product-header">
-                            <span class="product-name">${escapeHtml(p.name)}</span>
-                            <span class="product-category">${escapeHtml(p.category) || 'Sin cat'}</span>
-                        </div>
-                        <div class="progress-header">
-                            <span>${formatCurrency(p.price)}</span>
-                            <span class="text-${getStatusClass(p.unitStatus)}">
-                                ${getStatusIcon(p.unitStatus)} ${p.totalUnits}/${p.needed || 0}
-                            </span>
-                        </div>
-                        <div class="progress-header">
-                            <span>Valor:</span>
-                            <span class="text-${getMoneyStatusClass(p.moneyStatus)}">
-                                ${formatCurrency(p.totalValue)} / ${formatCurrency(p.neededValue)}
-                            </span>
-                        </div>
-                        <button class="btn btn-sm btn-outline mt-2 w-full" onclick="editProduct(${p.id})">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                    </div>
-                `;
-            }
-
-            function renderFullProduct(p) {
-                return `
-                    <div class="product-item">
-                        <div class="product-header">
-                            <span class="product-name">${escapeHtml(p.name)}</span>
-                            <span class="product-category">${escapeHtml(p.category) || 'Sin categoría'}</span>
-                        </div>
-                        
-                        <div class="count-grid">
-                            ${CONFIG.LOCATIONS.map(loc => `
-                                <div class="count-item">
-                                    <label>${capitalize(loc)}</label>
-                                    <input type="number" value="${p.counts[loc]}" 
-                                           onchange="updateCount(${p.id}, '${loc}', this.value)" 
-                                           class="input-number" min="0">
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <div class="progress-section">
-                            <div class="progress-header">
-                                <span>Unidades: ${p.totalUnits} / ${p.needed || 'N/A'}</span>
-                                <span class="text-${getStatusClass(p.unitStatus)}">
-                                    ${getStatusText(p.unitStatus)} (${p.unitPercentage}%)
-                                </span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill progress-${getProgressClass(p.unitStatus)}" 
-                                     style="width: ${p.unitPercentage}%"></div>
-                            </div>
-                        </div>
-
-                        <div class="progress-section">
-                            <div class="progress-header">
-                                <span>Valor: ${formatCurrency(p.totalValue)} / ${formatCurrency(p.neededValue)}</span>
-                                <span class="text-${getMoneyStatusClass(p.moneyStatus)}">
-                                    ${getStatusText(p.moneyStatus)} (${p.moneyPercentage}%)
-                                </span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill ${getMoneyProgressClass(p.moneyStatus)}" 
-                                     style="width: ${p.moneyPercentage}%"></div>
-                            </div>
-                            <div class="progress-header mt-2">
-                                <span>Diferencia:</span>
-                                <span class="${p.totalValue - p.neededValue >= 0 ? 'text-success' : 'text-danger'}">
-                                    ${formatCurrency(p.totalValue - p.neededValue)}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2 mt-2">
-                            <button class="btn btn-sm btn-outline" onclick="editProduct(${p.id})">
-                                <i class="fas fa-edit"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-outline text-danger" onclick="deleteProduct(${p.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function getStatusClass(status) {
-                const classes = { 'good': 'success', 'warning': 'warning', 'danger': 'danger', 'none': 'gray' };
-                return classes[status] || 'gray';
-            }
-
-            function getMoneyStatusClass(status) {
-                const classes = { 'good': 'money', 'warning': 'warning', 'danger': 'danger', 'none': 'gray' };
-                return classes[status] || 'gray';
-            }
-
-            function getProgressClass(status) {
-                const classes = { 'good': 'good', 'warning': 'warning', 'danger': 'danger', 'none': 'gray' };
-                return classes[status] || 'gray';
-            }
-
-            function getMoneyProgressClass(status) {
-                const classes = { 'good': 'progress-money', 'warning': 'progress-warning', 'danger': 'progress-danger', 'none': 'progress-gray' };
-                return classes[status] || 'progress-gray';
-            }
-
-            function getStatusText(status) {
-                const texts = { 'good': 'Suficiente', 'warning': 'Bajo', 'danger': 'Faltante', 'none': 'Sin necesidad' };
-                return texts[status] || 'Desconocido';
-            }
-
-            function getStatusColor(status) {
-                const colors = { 'good': '#16a34a', 'warning': '#ca8a04', 'danger': '#dc2626', 'none': '#6b7280' };
-                return colors[status] || colors.none;
-            }
-
-            function getStatusIcon(status) {
-                const icons = { 'good': '✓', 'warning': '⚠', 'danger': '✗', 'none': '•' };
-                return icons[status] || icons.none;
-            }
-
-            function renderCategories() {
-                const container = document.getElementById('categories');
-                if (state.categories.length === 0) {
-                    container.innerHTML = '<p class="text-gray">No hay categorías</p>';
-                    return;
-                }
-
-                const html = state.categories.map(cat => {
-                    const count = state.products.filter(p => p.category === cat).length;
-                    return `
-                        <div class="category">
-                            <span>${escapeHtml(cat)} (${count})</span>
-                            <div class="category-actions">
-                                <span class="category-action share" onclick="shareCategory('${escapeHtml(cat)}')" title="Compartir categoría">
-                                    <i class="fas fa-share-alt"></i>
-                                </span>
-                                <span class="category-action reset" onclick="resetCategoryCounts('${escapeHtml(cat)}')" title="Reiniciar conteos y necesidades">
-                                    <i class="fas fa-sync-alt"></i>
-                                </span>
-                                <span class="category-action delete" onclick="deleteCategory('${escapeHtml(cat)}')" title="Eliminar categoría">
-                                    <i class="fas fa-times"></i>
-                                </span>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                container.innerHTML = html;
-            }
-
-            function updateCategorySelects() {
-                const selects = [
-                    document.getElementById('productCategory'),
-                    document.getElementById('filterCategory')
-                ];
-
-                const options = state.categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
-
-                selects.forEach(select => {
-                    if (!select) return;
-                    const currentValue = select.value;
-                    select.innerHTML = '<option value="">Seleccionar</option>' + options;
-                    if (currentValue && state.categories.includes(currentValue)) {
-                        select.value = currentValue;
-                    }
+        function setupEventListeners() {
+            document.getElementById('productForm').addEventListener('submit', saveProduct);
+            document.getElementById('addCategory').addEventListener('click', addNewCategory);
+            document.getElementById('search').addEventListener('input', (e) => { state.filters.search = e.target.value.toLowerCase(); renderProducts(); });
+            document.getElementById('clearSearch').addEventListener('click', () => { document.getElementById('search').value = ''; state.filters.search = ''; renderProducts(); });
+            document.getElementById('filterCategory').addEventListener('change', (e) => { state.filters.category = e.target.value; renderProducts(); });
+            document.getElementById('sortBy').addEventListener('change', (e) => { state.filters.sort = e.target.value; renderProducts(); });
+            document.getElementById('clearFilters').addEventListener('click', () => { state.filters = { search: '', category: '', unitStatus: 'all', sort: 'name' }; document.getElementById('filterCategory').value = ''; document.getElementById('search').value = ''; renderProducts(); showNotification('Filtros limpiados', 'info'); });
+            document.getElementById('toggleView').addEventListener('click', () => { state.ui.compactView = !state.ui.compactView; renderProducts(); });
+            
+            document.querySelectorAll('[data-filter]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    state.filters.unitStatus = e.target.dataset.filter;
+                    renderProducts();
                 });
+            });
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById('productName').value.trim();
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const category = document.getElementById('productCategory').value;
+            const needed = parseInt(document.getElementById('productNeeded').value) || 0;
+            
+            if (!name || !price || !category) { showNotification('Complete todos los campos', 'error'); return; }
+            
+            const counts = {
+                piso: parseInt(document.getElementById('countPiso').value) || 0,
+                puertas: parseInt(document.getElementById('countPuertas').value) || 0,
+                camara: parseInt(document.getElementById('countCamara').value) || 0,
+                bodega: parseInt(document.getElementById('countBodega').value) || 0,
+                merma: parseInt(document.getElementById('countMerma').value) || 0
+            };
+            
+            const totalUnits = Object.values(counts).reduce((a, b) => a + b, 0);
+            const product = {
+                id: Date.now(),
+                name, price, category, needed,
+                counts, totalUnits,
+                totalValue: price * totalUnits,
+                neededValue: price * needed,
+                unitStatus: getStatus(totalUnits, needed),
+                unitPercentage: needed > 0 ? Math.min(100, Math.round((totalUnits / needed) * 100)) : 0
+            };
+            
+            state.products.push(product);
+            saveData();
+            renderProducts();
+            updateAllSummaries();
+            document.getElementById('productForm').reset();
+            ['Piso', 'Puertas', 'Camara', 'Bodega', 'Merma'].forEach(loc => document.getElementById(`count${loc}`).value = 0);
+            showNotification('Producto guardado', 'success');
+        }
+
+        function editProduct(id) {
+            const p = state.products.find(p => p.id === id);
+            if (!p) return;
+            
+            const modal = document.getElementById('editModal');
+            document.getElementById('editForm').innerHTML = `
+                <form id="editProductForm" onsubmit="event.preventDefault(); saveEditedProduct(${id})">
+                    <div class="form-group"><label>Nombre</label><input type="text" id="editName" value="${escapeHtml(p.name)}" required></div>
+                    <div class="form-group"><label>Precio</label><input type="number" id="editPrice" value="${p.price}" step="0.01" required></div>
+                    <div class="form-group"><label>Categoría</label><select id="editCategory" required>${state.categories.map(c => `<option ${c === p.category ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('')}</select></div>
+                    <div class="form-group"><label>Necesario</label><input type="number" id="editNeeded" value="${p.needed}"></div>
+                    <div class="count-grid">
+                        <div><label>Piso</label><input type="number" id="editPiso" value="${p.counts.piso}"></div>
+                        <div><label>Puertas</label><input type="number" id="editPuertas" value="${p.counts.puertas}"></div>
+                        <div><label>Cámara</label><input type="number" id="editCamara" value="${p.counts.camara}"></div>
+                        <div><label>Bodega</label><input type="number" id="editBodega" value="${p.counts.bodega}"></div>
+                        <div><label>Merma</label><input type="number" id="editMerma" value="${p.counts.merma}"></div>
+                    </div>
+                    <div class="flex gap-2 mt-4"><button type="submit" class="btn btn-success">Guardar</button><button type="button" class="btn btn-danger" onclick="deleteProduct(${id})">Eliminar</button><button type="button" class="btn btn-outline" onclick="closeAllModals()">Cancelar</button></div>
+                </form>
+            `;
+            modal.style.display = 'flex';
+        }
+
+        function saveEditedProduct(id) {
+            const p = state.products.find(p => p.id === id);
+            if (!p) return;
+            
+            p.name = document.getElementById('editName').value.trim();
+            p.price = parseFloat(document.getElementById('editPrice').value);
+            p.category = document.getElementById('editCategory').value;
+            p.needed = parseInt(document.getElementById('editNeeded').value) || 0;
+            p.counts = {
+                piso: parseInt(document.getElementById('editPiso').value) || 0,
+                puertas: parseInt(document.getElementById('editPuertas').value) || 0,
+                camara: parseInt(document.getElementById('editCamara').value) || 0,
+                bodega: parseInt(document.getElementById('editBodega').value) || 0,
+                merma: parseInt(document.getElementById('editMerma').value) || 0
+            };
+            p.totalUnits = Object.values(p.counts).reduce((a, b) => a + b, 0);
+            p.totalValue = p.price * p.totalUnits;
+            p.neededValue = p.price * p.needed;
+            p.unitStatus = getStatus(p.totalUnits, p.needed);
+            p.unitPercentage = p.needed > 0 ? Math.min(100, Math.round((p.totalUnits / p.needed) * 100)) : 0;
+            
+            saveData();
+            renderProducts();
+            updateAllSummaries();
+            closeAllModals();
+            showNotification('Producto actualizado', 'success');
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('¿Eliminar producto?')) return;
+            state.products = state.products.filter(p => p.id !== id);
+            saveData();
+            renderProducts();
+            updateAllSummaries();
+            closeAllModals();
+            showNotification('Producto eliminado', 'success');
+        }
+
+        function updateCount(productId, field, value) {
+            const p = state.products.find(p => p.id === productId);
+            if (!p) return;
+            p.counts[field] = parseInt(value) || 0;
+            p.totalUnits = Object.values(p.counts).reduce((a, b) => a + b, 0);
+            p.totalValue = p.price * p.totalUnits;
+            p.neededValue = p.price * p.needed;
+            p.unitStatus = getStatus(p.totalUnits, p.needed);
+            p.unitPercentage = p.needed > 0 ? Math.min(100, Math.round((p.totalUnits / p.needed) * 100)) : 0;
+            saveData();
+            renderProducts();
+            updateAllSummaries();
+        }
+
+        function addNewCategory() {
+            const name = document.getElementById('newCategory').value.trim();
+            if (!name) { showNotification('Ingresa un nombre', 'warning'); return; }
+            if (state.categories.includes(name)) { showNotification('Ya existe', 'warning'); return; }
+            state.categories.push(name);
+            saveData();
+            updateCategorySelects();
+            renderCategories();
+            document.getElementById('newCategory').value = '';
+            showNotification('Categoría agregada', 'success');
+        }
+
+        function deleteCategory(name) {
+            if (!confirm(`¿Eliminar categoría "${name}"?`)) return;
+            state.categories = state.categories.filter(c => c !== name);
+            state.products.forEach(p => { if (p.category === name) p.category = ''; });
+            saveData();
+            updateCategorySelects();
+            renderCategories();
+            renderProducts();
+            showNotification('Categoría eliminada', 'success');
+        }
+
+        function getStatus(found, needed) {
+            if (needed <= 0) return 'none';
+            if (found >= needed) return 'good';
+            if (found >= needed * 0.5) return 'warning';
+            return 'danger';
+        }
+
+        function renderProducts() {
+            let filtered = state.products.filter(p => {
+                if (state.filters.search && !p.name.toLowerCase().includes(state.filters.search)) return false;
+                if (state.filters.category && p.category !== state.filters.category) return false;
+                if (state.filters.unitStatus !== 'all' && p.unitStatus !== state.filters.unitStatus) return false;
+                return true;
+            });
+            
+            const sortFn = {
+                'name': (a,b) => a.name.localeCompare(b.name),
+                'nameDesc': (a,b) => b.name.localeCompare(a.name),
+                'unitsBest': (a,b) => (a.unitStatus === 'good' ? 1 : a.unitStatus === 'warning' ? 2 : 3) - (b.unitStatus === 'good' ? 1 : b.unitStatus === 'warning' ? 2 : 3),
+                'unitsWorst': (a,b) => (b.unitStatus === 'good' ? 1 : b.unitStatus === 'warning' ? 2 : 3) - (a.unitStatus === 'good' ? 1 : a.unitStatus === 'warning' ? 2 : 3)
+            }[state.filters.sort];
+            
+            if (sortFn) filtered.sort(sortFn);
+            
+            if (filtered.length === 0) {
+                document.getElementById('productList').innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i><p>No hay productos</p></div>';
+                return;
             }
+            
+            document.getElementById('productList').innerHTML = filtered.map(p => state.ui.compactView ? renderCompact(p) : renderFull(p)).join('');
+        }
 
-            function updatePreview() {
-                const needed = parseInt(document.getElementById('productNeeded').value) || 0;
-                const price = parseFloat(document.getElementById('productPrice').value) || 0;
-                
-                const found = CONFIG.LOCATIONS.reduce((sum, loc) => 
-                    sum + (parseInt(document.getElementById(`count${capitalize(loc)}`).value) || 0), 0);
+        function renderCompact(p) {
+            return `<div class="product-item">
+                <div class="product-header"><span class="product-name">${escapeHtml(p.name)}</span><span class="product-category">${escapeHtml(p.category)}</span></div>
+                <div class="progress-header"><span>${formatCurrency(p.price)}</span><span class="text-${p.unitStatus === 'good' ? 'success' : p.unitStatus === 'warning' ? 'warning' : 'danger'}">${p.totalUnits}/${p.needed || 0}</span></div>
+                <button class="btn btn-sm btn-outline w-full mt-2" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i> Editar</button>
+            </div>`;
+        }
 
-                const preview = document.getElementById('preview');
-                
-                if (needed <= 0 || price <= 0) {
-                    preview.style.display = 'none';
-                    return;
-                }
+        function renderFull(p) {
+            return `<div class="product-item">
+                <div class="product-header"><span class="product-name">${escapeHtml(p.name)}</span><span class="product-category">${escapeHtml(p.category)}</span></div>
+                <div class="count-grid">
+                    <div><label>Piso</label><input type="number" value="${p.counts.piso}" onchange="updateCount(${p.id}, 'piso', this.value)" min="0"></div>
+                    <div><label>Puertas</label><input type="number" value="${p.counts.puertas}" onchange="updateCount(${p.id}, 'puertas', this.value)" min="0"></div>
+                    <div><label>Cámara</label><input type="number" value="${p.counts.camara}" onchange="updateCount(${p.id}, 'camara', this.value)" min="0"></div>
+                    <div><label>Bodega</label><input type="number" value="${p.counts.bodega}" onchange="updateCount(${p.id}, 'bodega', this.value)" min="0"></div>
+                    <div><label>Merma</label><input type="number" value="${p.counts.merma}" onchange="updateCount(${p.id}, 'merma', this.value)" min="0"></div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header"><span>Unidades: ${p.totalUnits} / ${p.needed || 'N/A'}</span><span class="text-${p.unitStatus === 'good' ? 'success' : p.unitStatus === 'warning' ? 'warning' : 'danger'}">${p.unitPercentage}%</span></div>
+                    <div class="progress-bar"><div class="progress-fill progress-${p.unitStatus === 'good' ? 'good' : p.unitStatus === 'warning' ? 'warning' : 'danger'}" style="width: ${p.unitPercentage}%"></div></div>
+                </div>
+                <button class="btn btn-sm btn-outline w-full" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i> Editar</button>
+            </div>`;
+        }
 
-                preview.style.display = 'block';
-                
-                const percentage = calculatePercentage(found, needed);
-                const status = found >= needed ? 'good' : found >= needed * 0.5 ? 'warning' : 'danger';
-                
-                document.getElementById('previewUnits').textContent = `${found}/${needed}`;
-                document.getElementById('previewUnitsStatus').textContent = getStatusText(status);
-                document.getElementById('previewUnitsStatus').className = `text-${getStatusClass(status)}`;
-                document.getElementById('previewUnitsBar').className = `progress-fill progress-${getProgressClass(status)}`;
-                document.getElementById('previewUnitsBar').style.width = `${percentage}%`;
-                document.getElementById('previewMoney').textContent = formatCurrency(needed * price);
-            }
+        function renderCategories() {
+            document.getElementById('categories').innerHTML = state.categories.map(cat => `
+                <div class="category">
+                    <span>${escapeHtml(cat)} (${state.products.filter(p => p.category === cat).length})</span>
+                    <div class="category-actions">
+                        <span class="category-action share" onclick="shareCategory('${escapeHtml(cat)}')"><i class="fas fa-share-alt"></i></span>
+                        <span class="category-action delete" onclick="deleteCategory('${escapeHtml(cat)}')"><i class="fas fa-times"></i></span>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-            function updateAllSummaries() {
-                const total = state.products.length;
-                const totalValue = state.products.reduce((sum, p) => sum + p.totalValue, 0);
-                const totalNeeded = state.products.reduce((sum, p) => sum + (p.neededValue || 0), 0);
+        function shareCategory(category) {
+            const products = state.products.filter(p => p.category === category);
+            if (products.length === 0) return;
+            
+            const text = `📊 REPORTE: ${category}\n\n${products.map(p => `${p.name}: ${p.totalUnits}/${p.needed || 0} unidades (${p.unitPercentage}%) - ${formatCurrency(p.totalValue)}`).join('\n')}`;
+            navigator.clipboard.writeText(text);
+            showNotification('Reporte copiado al portapapeles', 'success');
+        }
 
-                document.getElementById('totalProducts').textContent = total;
-                document.getElementById('totalValue').textContent = formatCurrency(totalValue);
-                document.getElementById('totalNeeded').textContent = formatCurrency(totalNeeded);
+        function updateCategorySelects() {
+            const options = state.categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+            document.getElementById('productCategory').innerHTML = '<option value="">Seleccionar</option>' + options;
+            document.getElementById('filterCategory').innerHTML = '<option value="">Todas</option>' + options;
+        }
 
-                updateMoneyComparison();
-
-                switch(state.ui.activeTab) {
-                    case 'units': renderSummary(); break;
-                    case 'money': renderMoneySummary(); break;
-                    case 'comparison': renderComparisonSummary(); break;
-                }
-            }
-
-            function renderSummary() {
-                const productsWithNeeded = state.products.filter(p => p.needed > 0);
-                
-                if (productsWithNeeded.length === 0) {
-                    document.getElementById('summaryUnits').innerHTML = '<p class="text-center text-gray">Sin datos</p>';
-                    return;
-                }
-
-                const totalFound = productsWithNeeded.reduce((sum, p) => sum + p.totalUnits, 0);
-                const totalNeeded = productsWithNeeded.reduce((sum, p) => sum + p.needed, 0);
-                const percentage = calculatePercentage(totalFound, totalNeeded);
-
+        function updateAllSummaries() {
+            const total = state.products.length;
+            const totalValue = state.products.reduce((s, p) => s + p.totalValue, 0);
+            const totalNeeded = state.products.reduce((s, p) => s + p.neededValue, 0);
+            document.getElementById('totalProducts').textContent = total;
+            document.getElementById('totalValue').textContent = formatCurrency(totalValue);
+            document.getElementById('totalNeeded').textContent = formatCurrency(totalNeeded);
+            document.getElementById('comparisonReal').textContent = formatCurrency(totalValue);
+            document.getElementById('comparisonNeeded').textContent = formatCurrency(totalNeeded);
+            document.getElementById('differenceAmount').textContent = formatCurrency(totalValue - totalNeeded);
+            
+            const productsWithNeeded = state.products.filter(p => p.needed > 0);
+            if (productsWithNeeded.length > 0) {
+                const totalFound = productsWithNeeded.reduce((s, p) => s + p.totalUnits, 0);
+                const totalReq = productsWithNeeded.reduce((s, p) => s + p.needed, 0);
+                const percent = totalReq > 0 ? Math.min(100, Math.round((totalFound / totalReq) * 100)) : 0;
                 const good = productsWithNeeded.filter(p => p.unitStatus === 'good').length;
                 const warning = productsWithNeeded.filter(p => p.unitStatus === 'warning').length;
                 const danger = productsWithNeeded.filter(p => p.unitStatus === 'danger').length;
-
                 document.getElementById('summaryUnits').innerHTML = `
-                    <div class="summary-grid">
-                        <div class="summary-card">
-                            <h4>Encontrado</h4>
-                            <p>${totalFound}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4>Necesario</h4>
-                            <p>${totalNeeded}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4>%</h4>
-                            <p>${percentage}%</p>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill progress-${getProgressClassFromPercentage(percentage)}" 
-                             style="width: ${percentage}%"></div>
-                    </div>
-                    <div class="summary-grid mt-2">
-                        <div class="summary-card">
-                            <h4 class="text-success">Suficiente</h4>
-                            <p>${good}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4 class="text-warning">Bajo</h4>
-                            <p>${warning}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4 class="text-danger">Faltante</h4>
-                            <p>${danger}</p>
-                        </div>
-                    </div>
+                    <div class="summary-grid"><div class="summary-card"><h4>Encontrado</h4><p>${totalFound}</p></div><div class="summary-card"><h4>Necesario</h4><p>${totalReq}</p></div><div class="summary-card"><h4>%</h4><p>${percent}%</p></div></div>
+                    <div class="progress-bar"><div class="progress-fill progress-${percent >= 100 ? 'good' : percent >= 50 ? 'warning' : 'danger'}" style="width: ${percent}%"></div></div>
+                    <div class="summary-grid mt-2"><div class="summary-card"><h4 class="text-success">✓ Suficiente</h4><p>${good}</p></div><div class="summary-card"><h4 class="text-warning">⚠ Bajo</h4><p>${warning}</p></div><div class="summary-card"><h4 class="text-danger">✗ Faltante</h4><p>${danger}</p></div></div>
                 `;
+            } else {
+                document.getElementById('summaryUnits').innerHTML = '<p class="text-center text-gray">Sin productos con necesidad</p>';
             }
+        }
 
-            function renderMoneySummary() {
-                const productsWithNeeded = state.products.filter(p => p.needed > 0);
-                
-                if (productsWithNeeded.length === 0) {
-                    document.getElementById('summaryMoney').innerHTML = '<p class="text-center text-gray">Sin datos</p>';
-                    return;
-                }
+        function exportData() {
+            const data = { exportDate: new Date().toISOString(), products: state.products, categories: state.categories };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `inventario-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showNotification('Datos exportados', 'success');
+        }
 
-                const totalValue = productsWithNeeded.reduce((sum, p) => sum + p.totalValue, 0);
-                const totalNeeded = productsWithNeeded.reduce((sum, p) => sum + p.neededValue, 0);
-                const percentage = calculatePercentage(totalValue, totalNeeded);
-                const difference = totalValue - totalNeeded;
+        function saveData() {
+            localStorage.setItem('products', JSON.stringify(state.products));
+            localStorage.setItem('categories', JSON.stringify(state.categories));
+        }
 
-                const good = productsWithNeeded.filter(p => p.moneyStatus === 'good').length;
-                const warning = productsWithNeeded.filter(p => p.moneyStatus === 'warning').length;
-                const danger = productsWithNeeded.filter(p => p.moneyStatus === 'danger').length;
+        function loadData() {
+            const savedProducts = localStorage.getItem('products');
+            const savedCategories = localStorage.getItem('categories');
+            if (savedProducts) state.products = JSON.parse(savedProducts);
+            if (savedCategories) state.categories = JSON.parse(savedCategories);
+        }
 
-                document.getElementById('summaryMoney').innerHTML = `
-                    <div class="summary-grid">
-                        <div class="summary-card">
-                            <h4>Valor Real</h4>
-                            <p>${formatCurrency(totalValue)}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4>Valor Nec.</h4>
-                            <p>${formatCurrency(totalNeeded)}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4>%</h4>
-                            <p>${percentage}%</p>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill ${getMoneyProgressClassFromPercentage(percentage)}" 
-                             style="width: ${percentage}%"></div>
-                    </div>
-                    <p class="mt-2">
-                        <strong>Diferencia:</strong> 
-                        <span class="${difference >= 0 ? 'text-success' : 'text-danger'}">
-                            ${formatCurrency(difference)}
-                        </span>
-                    </p>
-                    <div class="summary-grid mt-2">
-                        <div class="summary-card">
-                            <h4 class="text-money">Suficiente</h4>
-                            <p>${good}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4 class="text-warning">Bajo</h4>
-                            <p>${warning}</p>
-                        </div>
-                        <div class="summary-card">
-                            <h4 class="text-danger">Faltante</h4>
-                            <p>${danger}</p>
-                        </div>
-                    </div>
-                `;
-            }
+        function formatCurrency(value) { return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value); }
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]; }); }
+        function showNotification(msg, type) { const n = document.getElementById('notification'); n.innerHTML = `<div class="notification ${type}"><i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i><span>${msg}</span></div>`; setTimeout(() => n.innerHTML = '', 3000); }
+        function closeAllModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
 
-            function getProgressClassFromPercentage(percentage) {
-                if (percentage >= 100) return 'good';
-                if (percentage >= 50) return 'warning';
-                return 'danger';
-            }
+        window.editProduct = editProduct;
+        window.deleteProduct = deleteProduct;
+        window.updateCount = updateCount;
+        window.deleteCategory = deleteCategory;
+        window.shareCategory = shareCategory;
+        window.saveEditedProduct = saveEditedProduct;
+        window.exportData = exportData;
+        window.syncToGoogleSheets = syncToGoogleSheets;
+        window.loadFromGoogleSheets = loadFromGoogleSheets;
+        window.closeAllModals = closeAllModals;
 
-            function getMoneyProgressClassFromPercentage(percentage) {
-                if (percentage >= 100) return 'progress-money';
-                if (percentage >= 50) return 'progress-warning';
-                return 'progress-danger';
-            }
-
-            // ========== UTILIDADES ==========
-            function capitalize(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            }
-
-            function escapeHtml(unsafe) {
-                if (!unsafe) return unsafe;
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
-
-            function formatCurrency(value) {
-                return new Intl.NumberFormat('es-MX', {
-                    style: 'currency',
-                    currency: 'MXN',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(value);
-            }
-
-            function showNotification(message, type = 'info') {
-                const notif = document.getElementById('notification');
-                
-                if (state.ui.notificationTimeout) {
-                    clearTimeout(state.ui.notificationTimeout);
-                }
-
-                const icons = {
-                    success: 'check-circle',
-                    error: 'exclamation-circle',
-                    warning: 'exclamation-triangle',
-                    info: 'info-circle'
-                };
-
-                notif.innerHTML = `
-                    <div class="notification ${type}">
-                        <i class="fas fa-${icons[type] || icons.info}"></i>
-                        <span>${message}</span>
-                    </div>
-                `;
-                
-                state.ui.notificationTimeout = setTimeout(() => {
-                    notif.innerHTML = '';
-                    state.ui.notificationTimeout = null;
-                }, CONFIG.NOTIFICATION_DURATION);
-            }
-
-            function closeAllModals() {
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.style.display = 'none';
-                });
-            }
-
-            // ========== PERSISTENCIA ==========
-            function saveData() {
-                try {
-                    localStorage.setItem(CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(state.products));
-                    localStorage.setItem(CONFIG.STORAGE_KEYS.CATEGORIES, JSON.stringify(state.categories));
-                } catch (e) {
-                    showNotification('Error al guardar los datos', 'error');
-                    console.error('Error saving data:', e);
-                }
-            }
-
-            function loadData() {
-                try {
-                    const savedProducts = localStorage.getItem(CONFIG.STORAGE_KEYS.PRODUCTS);
-                    const savedCategories = localStorage.getItem(CONFIG.STORAGE_KEYS.CATEGORIES);
-                    
-                    if (savedProducts) state.products = JSON.parse(savedProducts);
-                    if (savedCategories) state.categories = JSON.parse(savedCategories);
-                } catch (e) {
-                    showNotification('Error al cargar los datos', 'error');
-                    console.error('Error loading data:', e);
-                }
-            }
-
-            // ========== EXPONER FUNCIONES GLOBALES ==========
-            window.editProduct = editProduct;
-            window.deleteProduct = deleteProduct;
-            window.updateCount = updateCount;
-            window.deleteCategory = deleteCategory;
-            window.closeAllModals = closeAllModals;
-            window.shareCategory = shareCategory;
-            window.shareViaWhatsApp = shareViaWhatsApp;
-            window.shareViaEmail = shareViaEmail;
-            window.copyToClipboard = copyToClipboard;
-            window.generatePDF = generatePDF;
-            window.resetCategoryCounts = resetCategoryCounts;
-            window.resetMultipleCategories = resetMultipleCategories;
-            window.resetAllCounts = resetAllCounts;
-            window.saveEditedProduct = saveEditedProduct;
-            window.openImportModal = openImportModal;
-            window.exportData = exportData;
-            window.openTextImport = openTextImport;
-            window.handleFileImport = handleFileImport;
-            window.handleTextImport = handleTextImport;
-            window.confirmImport = confirmImport;
-        })();
+        initialize();
     </script>
 </body>
 </html>
